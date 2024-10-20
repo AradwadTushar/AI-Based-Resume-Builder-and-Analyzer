@@ -1,0 +1,18 @@
+# Ignore Python cache files
+__pycache__/
+
+# Ignore virtual environment
+venv/
+
+# Ignore uploaded resumes
+uploaded_resumes/
+
+# Ignore IDE specific files (e.g., for PyCharm, VSCode)
+.idea/
+.vscode/
+
+# Ignore logs
+*.log
+
+# Ignore environment variables
+.env
