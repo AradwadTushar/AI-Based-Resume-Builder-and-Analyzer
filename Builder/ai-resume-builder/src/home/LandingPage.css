@@ -1,0 +1,750 @@
+/* General Reset */
+* {
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: 0.2s linear;
+  }
+
+  .app {
+    margin-right: 30px;
+    margin-left: 30px;
+    padding: 20px;
+  }
+  
+  .home .content, .home .image {
+    transition: none; /* Remove transition temporarily for testing */
+  }
+  
+  /* Initial State */
+  .home .content,
+  .home .image,
+  .navbar,
+  .logo {
+    opacity: 1; /* Elements should be visible initially */
+    transition: opacity 1s ease-in-out; /* Apply smooth transition for opacity */
+  }
+  
+  .fas.fa-times,
+  .fas.fa-bars {
+    visibility: visible; /* Ensure icons are visible for the menu */
+  }
+  
+  /* Home Section Styling */
+  .home {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+     /* Brown background */
+  }
+  
+  .home .content {
+    flex: 1 1 40rem;
+    padding-top: 6.5rem;
+  }
+  
+  .home .content .title {
+    font-size: 6rem;
+    color: rgb(0, 0, 0);
+    text-transform: uppercase;
+  }
+  
+  .home .content .title span {
+    text-transform: uppercase;
+    color: greenyellow;
+  }
+  
+  .home .content .description {
+    font-size: 2rem;
+    font-weight: lighter;
+    line-height: 1.8;
+    padding: 1rem 0;
+    color: rgb(0, 0, 0);
+  }
+  
+  .home .content .btn {
+    margin-top: 1rem;
+    display: inline-block;
+    padding: 0.9rem 3rem;
+    font-size: 1.7rem;
+    color: white;
+    background: greenyellow;
+    cursor: pointer;
+    border-radius: 50px;
+  }
+  
+  .home .content .btn:hover {
+    letter-spacing: 0.2rem;
+  }
+  
+  /* Image Styling */
+  .home .image {
+    flex: 1 1 40rem;
+  }
+  
+  .home .image img {
+    width: 100%;
+  }
+  
+  /* Media Queries for responsiveness */
+  @media (max-width: 991px) {
+    html {
+      font-size: 55%;
+    }
+  
+    .header {
+      padding: 2rem;
+    }
+  
+    section {
+      padding: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .header #menu {
+      display: inline-block;
+    }
+  
+    .header .navbar {
+      position: fixed;
+      top: 0;
+      right: -105%;
+      width: 30rem;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(50px);
+      transition: 0.5s;
+      height: 100%;
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      z-index: 1200;
+    }
+  
+    .header .navbar.active {
+      right: 0;
+    }
+  
+    .header .navbar #close {
+      display: block;
+    }
+  
+    .header .navbar a {
+      display: block;
+      margin: 1rem 0;
+      text-align: center;
+      font-size: 3rem;
+    }
+  
+    .home .content {
+      padding-top: 9.5rem;
+    }
+  
+    .home .image img {
+      width: 368px;
+    }
+  
+    .home .content .title {
+      font-size: 4rem;
+    }
+  
+    .home .content .description {
+      font-size: 1.6rem;
+    }
+  }
+  
+  @media (max-width: 450px) {
+    html {
+      font-size: 50%;
+    }
+  }
+
+  /* Feature Section */
+  @import url('https://fonts.googleapis.com/css?family=Poppins:200,400,600&display=swap');
+
+  
+*{
+    box-sizing: border-box;
+}
+
+.FeatureSection {
+    padding-top: 50px;
+}
+body{
+    background-color: rgb(250, 250, 250);
+    font-family: 'Poppins', sans-serif;
+}
+
+header{
+    margin: 50px auto;
+    max-width: 600px;
+    text-align: center;
+}
+
+/* .FeatureHead {
+    font-size: 50px;
+    font-weight: 900;
+    margin: 0;
+    text-transform: uppercase;
+    text-align: center;
+    color: transparent;
+    background-image: linear-gradient(90deg, #0f0, #00ff88, #fff, #00b300, #000);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    animation: rotateGradient 5s infinite linear, shimmer 3s infinite alternate ease-in-out;
+    letter-spacing: 5px;
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+}
+
+@keyframes rotateGradient {
+    0% {
+        background-position: 0%;
+    }
+    100% {
+        background-position: 300%;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: scale(1) skewX(0deg);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.05) skewX(10deg);
+        filter: brightness(1.4);
+    }
+    100% {
+        transform: scale(1) skewX(0deg);
+        filter: brightness(1);
+    }
+} */
+.FeatureHead {
+    font-size: 50px;
+    font-weight: 800;
+    margin: 0;
+    color: black; /* Vibrant green */
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+
+
+
+
+
+
+
+
+
+/* h1{
+    font-size: 50px;
+    font-weight: 800;
+    margin: 0;
+    color: greenyellow;
+    
+} */
+
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 1840px;
+   
+}
+
+.box{
+    background-color: #fff;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    margin: 15px;
+    width: 350px;
+}
+
+.box::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 10px;
+    width: 100%;
+}
+
+.box-cyan::after{
+    background-color: rgb(69, 211, 211);
+}
+
+.box-red::after{
+    background-color: rgb(234, 83, 83);
+}
+
+.box-blue::after{
+    background-color: rgb(84, 158, 242);
+}
+
+.box-orange::after{
+    background-color: rgb(252, 175, 74);
+}
+
+.box-push{
+    transform: translateY(50%);
+}
+
+.box h2{
+    margin: 0;
+}
+
+.box:hover h2.box-cyan{
+    color: rgb(69, 211, 211);
+}
+
+.box:hover h2.box-red{
+    color: rgb(234, 83, 83);
+}
+
+.box:hover h2.box-blue{
+    color: rgb(84, 158, 242);
+}
+
+.box:hover h2.box-orange{
+    color: rgb(252, 175, 74);
+}
+
+.box p {
+    font-size: 14px;
+    margin: 15px 0 10px;
+}
+
+.box:hover p{
+    color: rgb(88, 87, 87);
+}
+
+.box img{
+    display: block;
+    margin-left: auto;
+}
+
+.box:hover img{
+    transform: scale(1.1);
+}
+
+@media (max-width: 775px){
+    .box-push{
+        transform: translateY(0);
+    }
+}
+  
+/* Feature Section Styling */
+.feature-section {
+  padding-top: 40px ;
+  padding-bottom: 40px;
+  background-color: #f7f7f7;
+  margin-bottom: 50px;
+}
+
+.feature-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #32CD32; /* Green color */
+  margin-bottom: 30px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  justify-items: center;
+}
+
+.feature-box {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 15px;
+}
+
+.feature-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.feature-description {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 28px;
+  }
+
+  .feature-title {
+    font-size: 20px;
+  }
+
+  .feature-description {
+    font-size: 14px;
+  }
+}
+
+/* AboutPage */
+.about {
+    padding-top: 70px;
+    padding-bottom: 50px;
+    background-image: url(../image/about-bg.png);
+    background-repeat: repeat-y;
+    background-position: center top;
+  }
+  
+  .about .row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .about .row .image {
+    flex: 1 1 55rem;
+  }
+  
+  .about .row .image img {
+    width: 100%;
+  }
+  
+  .about .row .content {
+    flex: 1 1 45rem;
+    padding: 8rem;
+  }
+  
+  .about .row .content h3 {
+    font-size: 3rem;
+    color: Black;
+  }
+  
+  .about .row .content p {
+    font-size: 1.6rem;
+    color: #444;
+    padding: 1rem 0;
+    line-height: 1.8;
+  }
+  
+  .line {
+    margin-top: 35px;
+    margin-bottom: 35px;
+    width: 100px;
+    height: 3px;
+    background: var(--primary-color);
+  }
+  
+  /* Benefits section  */
+  :root {
+    --main-color: white;  /* Customize your main color */
+    --primary-color: #FF5733; /* Customize primary color */
+    --black: #000000;
+    --card-bg: #ffffff;  /* White background for card content */
+  }
+  
+  .benefits {
+    padding: 50px 0;
+    text-align: center;
+    margin-top: 200px;
+  }
+  
+  .benefits .heading {
+    font-size: 3rem;
+    color: black;
+    margin-bottom: 50px;
+  }
+  
+  .benefits-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    gap: 2rem;
+    padding: 0 10px;
+  }
+  
+  .benefit-card {
+    background-color: var(--main-color); /* Green background for card */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .benefit-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+    background-color: greenyellow; /* Hover background color */
+  }
+  
+  /* Title and Description Styling */
+  .card-title h3 {
+    color: greenyellow;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    background: none; /* Ensures no background behind the title */
+    transition: color 0.3s ease; /* Add transition for smooth color change */
+  }
+  
+  .card-description p {
+    color: black;
+    font-size: 1.6rem;
+    line-height: 1.8;
+    background: none; /* Ensures no background behind the description */
+    transition: color 0.3s ease; /* Add transition for smooth color change */
+  }
+  
+  .card-title, .card-description {
+    background: none; /* Ensures no background applied to the text areas */
+  }
+  
+  /* Hover State for Title and Description Text */
+  .benefit-card:hover .card-title h3 {
+    color: white; /* Change title color on hover */
+  }
+  
+  .benefit-card:hover .card-description p {
+    color: white; /* Change description color on hover */
+  }
+  
+  
+  /* Optional: Add a background color for the card content area if needed */
+  .card-content {
+    background-color: var(--card-bg); /* Card content area has a white background */
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: none;
+  }
+  
+  @media (max-width: 768px) {
+    .benefits-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Team section  */
+/* styles.css */
+
+/* Container settings */
+.team-container {
+    background-color: #eeeeee;
+    padding: 24px;
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+
+  
+  /* Content area */
+  .team-content {
+    max-width: 1200px; /* Increase max-width */
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+    padding-left: 24px;
+    padding-right: 24px;
+    grid-template-columns: 1fr 2fr; /* Adjust for responsiveness */
+  }
+  
+  /* Team intro */
+  .team-intro {
+    max-width: 600px; /* Increase width for better description space */
+  }
+  
+  /* Heading styles */
+  .team-heading {
+    font-size: 2.5rem; /* Increase heading size */
+    font-weight: 600;
+    color: #1f2937;
+  }
+  
+  /* Description */
+  .team-description {
+    margin-top: 24px;
+    font-size: 1.25rem; /* Increase font size */
+    color: #4b5563;
+  }
+  
+  /* People list */
+  .people-list {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust for 3 people */
+  }
+  
+  .team-description  .people-list  .team-heading {
+    background-color: none;
+  }
+  /* Individual person styling */
+  .person {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  
+  /* Person info container */
+  .person-info {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  
+  /* Person image styling */
+  .person-image {
+    width: 80px; /* Increase image size */
+    height: 80px;
+    border-radius: 50%;
+  }
+  
+  /* Person details styling */
+  .person-details {
+    display: block;
+  }
+  
+  /* Name styling */
+  .person-name {
+    font-size: 1.25rem; /* Increase font size */
+    font-weight: 600;
+    color: #1f2937;
+  }
+  
+  /* Role styling */
+  .person-role {
+    font-size: 1rem; /* Increase font size */
+    font-weight: 600;
+    color: #4f46e5;
+  }
+  
+  /* Footer Container */
+.footer-container {
+    background-color: #1f2937; /* Dark background */
+    color: #ffffff; /* White text */
+    padding: 40px 24px;
+    margin-top: 40px;
+  }
+  
+  /* Footer Content Layout */
+  .footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    
+  }
+  
+  
+  /* Footer Titles */
+  .footer-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  
+  /* Footer Description */
+  .footer-description {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #e5e7eb; /* Light gray text */
+  }
+  
+  /* Footer Links */
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: 8px;
+  }
+  
+  .footer-links a {
+    text-decoration: none;
+    color: white; /* Indigo color */
+    transition: color 0.2s;
+  }
+  
+  .footer-links a:hover {
+    color: #a5b4fc; /* Lighter indigo on hover */
+  }
+  
+  /* Footer Contact */
+  .footer-section.contact p {
+    margin-bottom: 8px;
+  }
+  
+  .footer-section.contact a {
+    text-decoration: none;
+    color: white; /* Indigo */
+  }
+  
+  .footer-section.contact a:hover {
+    color: #a5b4fc; /* Lighter indigo */
+  }
+  
+  /* Social Media Icons */
+  .footer-social a {
+    display: inline-block;
+    margin-right: 12px;
+  }
+  
+  .footer-social img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1); /* White icons */
+    transition: filter 0.2s;
+  }
+  
+  .footer-social img:hover {
+    filter: brightness(0.8) invert(1); /* Slight hover effect */
+  }
+  
+  /* Footer Bottom */
+  .footer-bottom {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.875rem;
+    color: #9ca3af; /* Light gray */
+  }
+  
+  .footer-bottom p {
+    margin: 0;
+  }
+  
+  

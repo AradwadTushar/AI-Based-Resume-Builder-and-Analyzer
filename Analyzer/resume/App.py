@@ -122,7 +122,7 @@ def run():
 
 
     # Create the DB
-    db_sql = """CREATE DATABASE IF NOT EXISTS CV;"""
+    db_sql = """CREATE DATABASE IF NOT EXISTS resume_analyzer;"""
     cursor.execute(db_sql)
 
     # Create table
@@ -174,6 +174,7 @@ def run():
                     st.text('Resume pages: '+str(resume_data['no_of_pages']))
                 except:
                     pass
+                ## Determining the candidate level
                 cand_level = ''
                 if resume_data['no_of_pages'] == 1:
                     cand_level = "Fresher"

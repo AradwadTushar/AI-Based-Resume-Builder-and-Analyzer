@@ -7,3 +7,5 @@ plotly
 pymysql
 streamlit-tags
 Pillow
+.\venv\Scripts\activate
+streamlit run  App.py
