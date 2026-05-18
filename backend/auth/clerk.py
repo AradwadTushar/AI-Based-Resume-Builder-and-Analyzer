@@ -14,13 +14,25 @@ clerk_sdk = Clerk(
 async def verify_clerk_token(request):
     request_state = clerk_sdk.authenticate_request(
         request,
-        AuthenticateRequestOptions(),
+        AuthenticateRequestOptions(
+            authorized_parties=[
+                "http://localhost:5173",
+            ]
+        ),
     )
+
+    print("REQUEST STATE:", request_state)
+
+    print("IS SIGNED IN:", request_state.is_signed_in)
+
+    print("PAYLOAD:", request_state.payload)
+
+    print("REASON:", request_state.reason)
 
     if not request_state.is_signed_in:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired token",
+            detail=f"Auth failed: {request_state.reason}",
         )
 
     return request_state.payload

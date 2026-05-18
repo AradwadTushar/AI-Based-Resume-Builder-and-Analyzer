@@ -29,14 +29,27 @@ async def get_current_user(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ):
-    payload = await verify_clerk_token(request)
+    # --- TEMPORARY DEBUG: Print the incoming Authorization header ---
+    authorization = request.headers.get("Authorization")
+    print("AUTH HEADER:", authorization)
+
+    try:
+        # token verification
+        payload = await verify_clerk_token(request)
+    except Exception as e:
+        # --- TEMPORARY DEBUG: Print the exact token validation failure ---
+        print("TOKEN ERROR:", e)
+        raise HTTPException(
+            status_code=401, 
+            detail="Authentication failed"
+        )
 
     clerk_id = payload.get("sub")
 
     if not clerk_id:
         raise HTTPException(
             status_code=401,
-            detail="Invalid token",
+            detail="Invalid token: Missing 'sub' claim",
         )
 
     user = await get_or_create_user(

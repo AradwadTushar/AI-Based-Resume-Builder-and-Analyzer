@@ -1,14 +1,14 @@
-import uuid
-
+from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from uuid import UUID
 from database import get_db
 from models.resume import Resume
 from schemas.resume import ResumeCreate, ResumeResponse
 from sqlalchemy import select
 from schemas.resume import ResumeUpdate
+from auth.dependencies import get_current_user
 #from routers.auth import get_current_user
 
 
@@ -20,16 +20,41 @@ router = APIRouter(
 
 
 
-@router.post("/", response_model=ResumeResponse)
+@router.post(
+    "/",
+    response_model=ResumeResponse,
+)
 async def create_resume(
     resume_data: ResumeCreate,
+    current_user=Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     new_resume = Resume(
-        user_id=FAKE_USER_ID,
+        user_id=current_user.id,
+
         title=resume_data.title,
-        template=resume_data.template,
-        data=resume_data.data,
+
+        template="modern",
+
+        data={
+    "personalInfo": {
+        "fullName": "",
+        "email": "",
+        "phone": "",
+        "location": "",
+        "linkedin": "",
+        "github": "",
+        "portfolio": "",
+        "summary": "",
+    },
+
+    "experience": [],
+    "education": [],
+    "skills": [],
+    "projects": [],
+},
+
+        photo_url=None,
     )
 
     db.add(new_resume)
@@ -40,28 +65,40 @@ async def create_resume(
 
     return new_resume
 
-@router.get("/")
+@router.get(
+    "/",
+    response_model=list[ResumeResponse]
+)
 async def get_resumes(
-    ##current_user: dict = Depends(get_current_user),
+    current_user=Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    return {
-        "message": "Authenticated route working",
-        "user": current_user,
-    }
-    
-    
-@router.get("/{resume_id}", response_model=ResumeResponse)
-async def get_resume(
-    resume_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
-):
-    result = await db.execute(
-        select(Resume).where(
-            Resume.id == resume_id,
-            Resume.user_id == FAKE_USER_ID,
-        )
+    query = select(Resume).where(
+        Resume.user_id == current_user.id
     )
+
+    result = await db.execute(query)
+
+    resumes = result.scalars().all()
+
+    return resumes
+    
+    
+@router.get(
+    "/{resume_id}",
+    response_model=ResumeResponse,
+)
+async def get_resume(
+    resume_id: UUID,
+    current_user=Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    query = select(Resume).where(
+        Resume.id == resume_id,
+        Resume.user_id == current_user.id,
+    )
+
+    result = await db.execute(query)
 
     resume = result.scalar_one_or_none()
 
@@ -73,18 +110,23 @@ async def get_resume(
 
     return resume
 
-@router.put("/{resume_id}", response_model=ResumeResponse)
+@router.patch(
+    "/{resume_id}",
+    response_model=ResumeResponse,
+)
 async def update_resume(
-    resume_id: uuid.UUID,
+    resume_id: UUID,
     resume_data: ResumeUpdate,
+
+    current_user=Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    result = await db.execute(
-        select(Resume).where(
-            Resume.id == resume_id,
-            Resume.user_id == FAKE_USER_ID,
-        )
+    query = select(Resume).where(
+        Resume.id == resume_id,
+        Resume.user_id == current_user.id,
     )
+
+    result = await db.execute(query)
 
     resume = result.scalar_one_or_none()
 
@@ -94,10 +136,12 @@ async def update_resume(
             detail="Resume not found",
         )
 
-    update_data = resume_data.model_dump(exclude_unset=True)
-
-    for key, value in update_data.items():
-        setattr(resume, key, value)
+    if resume_data.title is not None:
+        resume.title = resume_data.title
+        if resume_data.title is not None:
+         resume.title = resume_data.title
+        if resume_data.data is not None:
+         resume.data = resume_data.data
 
     await db.commit()
 
@@ -107,15 +151,18 @@ async def update_resume(
 
 @router.delete("/{resume_id}")
 async def delete_resume(
-    resume_id: uuid.UUID,
+    resume_id: UUID,
+
+    current_user=Depends(get_current_user),
+
     db: AsyncSession = Depends(get_db),
 ):
-    result = await db.execute(
-        select(Resume).where(
-            Resume.id == resume_id,
-            Resume.user_id == FAKE_USER_ID,
-        )
+    query = select(Resume).where(
+        Resume.id == resume_id,
+        Resume.user_id == current_user.id,
     )
+
+    result = await db.execute(query)
 
     resume = result.scalar_one_or_none()
 
@@ -129,4 +176,7 @@ async def delete_resume(
 
     await db.commit()
 
-    return {"message": "Resume deleted successfully"}
+    return {
+        "message": "Resume deleted successfully"
+    }
+

@@ -1,63 +1,18 @@
-import {
-  SignedIn,
-  SignedOut,
-  SignIn,
-  UserButton,
-  useAuth,
-} from "@clerk/clerk-react";
+import { useEffect } from "react";
+import { useAuth } from "@clerk/clerk-react";
 
-function Dashboard() {
-  const { getToken } = useAuth();
+import { setupInterceptors } from "./api/setupInterceptors";
 
-  const callProtectedRoute = async () => {
-    const token = await getToken();
-
-    const response = await fetch(
-      "http://localhost:8000/auth/protected",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const data = await response.json();
-
-    console.log(data);
-  };
-
-  return (
-    <div>
-      <h1>Dashboard</h1>
-
-      <UserButton />
-
-      <button onClick={callProtectedRoute}>
-        Call Protected Route
-      </button>
-    </div>
-  );
-}
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <SignedOut>
-        <SignIn />
-      </SignedOut>
+  const { getToken } = useAuth();
 
-      <SignedIn>
-        <Dashboard />
-      </SignedIn>
-    </div>
-  );
+  useEffect(() => {
+    setupInterceptors(getToken);
+  }, [getToken]);
+
+  return <AppRoutes />;
 }
 
 export default App;
