@@ -1,36 +1,25 @@
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from jose import jwt, JWTError
+from fastapi import APIRouter, Depends
 
-from config import settings
+from auth.dependencies import get_current_user
+
+router = APIRouter(
+    prefix="/auth",
+    tags=["auth"],
+)
 
 
-security = HTTPBearer()
-
-
-async def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
+@router.get("/protected")
+async def protected_route(
+    current_user = Depends(get_current_user),
 ):
-    token = credentials.credentials
+    return {
+        "message": "Authenticated request success",
+        "user_id": str(current_user.id),
+        "clerk_id": current_user.clerk_id,
+    }
 
-    try:
-        payload = jwt.get_unverified_claims(token)
-
-        clerk_id = payload.get("sub")
-
-        if not clerk_id:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid token",
-            )
-
-        return {
-            "clerk_id": clerk_id,
-            "email": payload.get("email"),
-        }
-
-    except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token",
-        )
+@router.get("/me")
+async def get_me(
+    current_user = Depends(get_current_user)
+):
+    return current_user

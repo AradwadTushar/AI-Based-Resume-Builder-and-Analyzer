@@ -17,7 +17,7 @@ class User(Base, UUIDMixin, TimestampMixin):
     email: Mapped[str] = mapped_column(
         String,
         unique=True,
-        nullable=False,
+        nullable=True,
     )
 
     resumes = relationship(
@@ -31,3 +31,5 @@ class User(Base, UUIDMixin, TimestampMixin):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+    
+    
