@@ -21,6 +21,18 @@ function BasicTemplate({ formData }) {
         <h1 className="text-3xl font-bold uppercase tracking-wide text-gray-900 mb-1">
           {personalInfo?.fullName || "Your Name"}
         </h1>
+        {/* PROFESSIONAL SUMMARY */}
+{formData.summary && (
+  <section className="mb-6">
+    <h2 className="text-sm font-bold uppercase tracking-wider text-gray-900 border-b border-gray-900 pb-0.5 mb-2 font-sans">
+      Professional Summary
+    </h2>
+
+    <p className="text-gray-700 text-xs sm:text-sm leading-relaxed whitespace-pre-line">
+      {formData.summary}
+    </p>
+  </section>
+)}
         
         {/* Contact Strip: Using standard character dividers instead of graphics */}
         <div className="flex flex-wrap justify-center items-center gap-2 text-xs text-gray-600 font-sans print:text-black">

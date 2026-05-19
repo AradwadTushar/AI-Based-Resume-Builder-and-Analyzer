@@ -1,12 +1,21 @@
 import React from "react";
 
-function ExperienceSection({ formData, addExperience, updateExperience, removeExperience }) {
+// 1. Added handleRewriteExperience and aiLoadingIndex to the props destructured below
+function ExperienceSection({ 
+  formData, 
+  addExperience, 
+  updateExperience, 
+  removeExperience,
+  handleRewriteExperience, 
+  aiLoadingIndex 
+}) {
   return (
     <div className="space-y-4 mt-6 pt-6 border-t">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold text-xl">Experience</h3>
 
         <button
+          type="button"
           onClick={addExperience}
           className="border px-4 py-1 rounded bg-gray-50 hover:bg-gray-100 transition text-sm"
         >
@@ -21,6 +30,7 @@ function ExperienceSection({ formData, addExperience, updateExperience, removeEx
               Entry #{index + 1}
             </span>
             <button
+              type="button"
               onClick={() => removeExperience(index)}
               className="text-red-500 hover:text-red-700 text-sm font-medium"
             >
@@ -55,6 +65,15 @@ function ExperienceSection({ formData, addExperience, updateExperience, removeEx
             placeholder="Description"
             className="border p-2 rounded w-full text-sm h-24"
           />
+          
+          <button
+            type="button"
+            onClick={() => handleRewriteExperience(index)}
+            disabled={aiLoadingIndex === index}
+            className="text-sm bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 disabled:opacity-50"
+          >
+            {aiLoadingIndex === index ? "Improving..." : "Improve with AI"}
+          </button>
         </div>
       ))}
     </div>

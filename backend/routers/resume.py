@@ -37,6 +37,8 @@ async def create_resume(
         template="modern",
 
         data={
+            "summary": "",
+            
     "personalInfo": {
         "fullName": "",
         "email": "",
