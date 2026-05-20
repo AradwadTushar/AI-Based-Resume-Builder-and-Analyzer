@@ -1,0 +1,314 @@
+/* ═══════════════════════════════════════════════════════════════
+   Modern ATS Professional — style.css
+   WeasyPrint-safe · ATS-compatible · Single-column · A4
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Variables ───────────────────────────────────────────────── */
+:root {
+  --accent:        #1a56a0;      /* professional navy blue */
+  --accent-light:  #e8f0fb;
+  --text-primary:  #111827;
+  --text-secondary:#374151;
+  --text-muted:    #6b7280;
+  --divider:       #d1d5db;
+  --divider-top:   #1a56a0;
+
+  --font-body:     "Georgia", "Times New Roman", serif;
+  --font-sans:     "Helvetica Neue", "Helvetica", Arial, sans-serif;
+
+  --page-padding-v: 18mm;
+  --page-padding-h: 18mm;
+
+  --size-name:     26pt;
+  --size-title:    11pt;
+  --size-contact:  9pt;
+  --size-section:  10pt;
+  --size-body:     9.5pt;
+  --size-date:     9pt;
+}
+
+/* ── Page / Reset ────────────────────────────────────────────── */
+@page {
+  size: A4;
+  margin: var(--page-padding-v) var(--page-padding-h);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  color: var(--text-primary);
+  background: #ffffff;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── Page wrapper ────────────────────────────────────────────── */
+.page {
+  width: 100%;
+  max-width: 210mm;
+  margin: 0 auto;
+}
+
+/* ── HEADER ──────────────────────────────────────────────────── */
+.header {
+  text-align: center;
+  padding-bottom: 10pt;
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-size: var(--size-name);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: var(--size-title);
+  font-weight: 400;
+  color: var(--accent);
+  margin-top: 3pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.contact-row {
+  margin-top: 6pt;
+  font-size: var(--size-contact);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.contact-item {
+  display: inline;
+}
+
+.contact-sep {
+  display: inline;
+  margin: 0 5pt;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── TOP DIVIDER ─────────────────────────────────────────────── */
+.divider-top {
+  height: 2.5pt;
+  background-color: var(--divider-top);
+  margin: 8pt 0 0 0;
+}
+
+/* ── SECTION ─────────────────────────────────────────────────── */
+.section {
+  margin-top: 12pt;
+  page-break-inside: avoid;
+}
+
+.section-title {
+  font-family: var(--font-sans);
+  font-size: var(--size-section);
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  padding-bottom: 3pt;
+  border-bottom: 1pt solid var(--divider);
+  margin-bottom: 7pt;
+}
+
+/* ── SUMMARY ─────────────────────────────────────────────────── */
+.summary-text {
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* ── SKILLS ──────────────────────────────────────────────────── */
+.skills-block {
+  display: block;
+}
+
+.skill-group {
+  display: block;
+  margin-bottom: 3pt;
+  font-size: var(--size-body);
+  line-height: 1.5;
+}
+
+.skill-category {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-right: 4pt;
+}
+
+.skill-items {
+  color: var(--text-secondary);
+}
+
+/* ── ENTRY (Experience, Projects, Education) ─────────────────── */
+.entry {
+  margin-bottom: 9pt;
+  page-break-inside: avoid;
+}
+
+.entry-header {
+  display: block;
+  width: 100%;
+  overflow: hidden;       /* clearfix for float layout — WeasyPrint safe */
+}
+
+.entry-left {
+  float: left;
+  max-width: 72%;
+}
+
+.entry-right {
+  float: right;
+  text-align: right;
+  max-width: 28%;
+}
+
+/* Clearfix */
+.entry-header::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.entry-primary {
+  display: block;
+  font-size: var(--size-body);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.entry-secondary {
+  display: block;
+  font-size: var(--size-body);
+  color: var(--text-secondary);
+  line-height: 1.3;
+  margin-top: 1pt;
+}
+
+.tech-stack {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.entry-link {
+  font-weight: 400;
+  color: var(--accent);
+  font-size: 8.5pt;
+}
+
+.entry-date {
+  display: block;
+  font-size: var(--size-date);
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.35;
+  margin-top: 1pt;
+  white-space: nowrap;
+}
+
+.entry-description {
+  font-size: var(--size-body);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-top: 3pt;
+}
+
+/* ── BULLET LIST ─────────────────────────────────────────────── */
+.bullet-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 4pt;
+}
+
+.bullet-list li {
+  position: relative;
+  padding-left: 10pt;
+  font-size: var(--size-body);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 2.5pt;
+}
+
+.bullet-list li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── CERTIFICATIONS ──────────────────────────────────────────── */
+.cert-row {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 4pt;
+  page-break-inside: avoid;
+}
+
+.cert-left {
+  float: left;
+  max-width: 72%;
+}
+
+.cert-right {
+  float: right;
+  text-align: right;
+  max-width: 28%;
+}
+
+.cert-row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.cert-name {
+  display: block;
+  font-size: var(--size-body);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.cert-issuer {
+  display: block;
+  font-size: var(--size-body);
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+
+/* ── PRINT SAFETY ────────────────────────────────────────────── */
+@media print {
+  .page {
+    max-width: none;
+  }
+
+  .section {
+    page-break-inside: avoid;
+  }
+
+  .entry {
+    page-break-inside: avoid;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
