@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getResume, updateResume } from "@/api/resumeApi";
+import { getResume, updateResume,downloadResumePdf } from "@/api/resumeApi";
 import {
   generateSummary,
   rewriteExperience,
@@ -16,7 +16,8 @@ import EducationSection from "../components/editor/EducationSection";
 import ProjectsSection from "../components/editor/ProjectsSection";
 import CertificationsSection from "../components/editor/CertificationsSection";
 import SummarySection from "../components/editor/SummarySection";
-
+import TemplateSelector from "../components/editor/TemplateSelector";
+import ExportPreviewModal from "../components/editor/ExportPreviewModal";
 // Modal Imports
 import ATSAnalysisModal from "../components/editor/ATSAnalysisModal";
 import JDMatchModal from "../components/editor/JDMatchSection";
@@ -51,6 +52,14 @@ function ResumeEditor() {
   const [aiError, setAiError] =
   useState("");
 
+  const [
+
+  isPreviewOpen,
+
+  setIsPreviewOpen
+
+] = useState(false);
+
   useEffect(() => {
     const fetchResume = async () => {
       try {
@@ -82,7 +91,15 @@ function ResumeEditor() {
     setSaveStatus("Saving...");
     const timeout = setTimeout(async () => {
       try {
-        await updateResume(id, { title: formData.title, data: formData });
+        await updateResume(id, {
+
+  title: formData.title,
+
+  data: formData,
+
+  template:
+    formData.template || "engineer"
+});
         setSaveStatus("Saved");
       } catch (err) {
         console.error(err);
@@ -97,6 +114,8 @@ function ResumeEditor() {
       const updatedResume = await updateResume(id, {
         title: formData.title,
         data: formData,
+      
+        
       });
       setResume(updatedResume);
       alert("Saved successfully!");
@@ -274,6 +293,37 @@ const hasResumeContent = () => {
   );
 };
 
+const handleDownload = () => {
+
+  setIsPreviewOpen(true);
+};
+
+const handleFinalDownload =
+async () => {
+
+  try {
+
+    await downloadResumePdf(id);
+
+  } catch (error) {
+
+    console.error(
+      "PDF download failed",
+      error
+    );
+  }
+};
+
+const handleTemplateChange =
+(templateId) => {
+
+  setFormData((prev) => ({
+    ...prev,
+    template: templateId
+  }))
+}
+
+
   if (loading) return <div className="p-6 text-center text-gray-500 font-sans">Loading editor...</div>;
   if (error) return <div className="p-6 text-center text-red-500 font-sans">{error}</div>;
 
@@ -289,12 +339,9 @@ const hasResumeContent = () => {
               <p className="text-xs text-gray-500 mt-0.5">Working on: {formData?.title}</p>
             </div>
             <div className="flex gap-2">
-              <button
-                onClick={() => window.print()}
-                className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded font-medium text-sm transition"
-              >
-                Download PDF
-              </button>
+              <button onClick={handleDownload}>
+    Download PDF
+</button>
               <button
                 onClick={handleSave}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded shadow transition font-medium text-sm"
@@ -343,7 +390,15 @@ title={
               Test Against JD
             </button>
           </div>
+<TemplateSelector
 
+  selectedTemplate={
+    formData.template || "engineer"
+  }
+
+  onSelect={handleTemplateChange}
+
+/>
           {/* Form Sections */}
           <div className="space-y-6 pb-12">
             <PersonalInfoSection
@@ -412,6 +467,19 @@ title={
         jdLoading={jdLoading}
         jdAnalysis={jdAnalysis}
       />
+      <ExportPreviewModal
+
+  isOpen={isPreviewOpen}
+
+  onClose={() =>
+    setIsPreviewOpen(false)
+  }
+
+  resumeId={id}
+
+  onDownload={handleFinalDownload}
+
+/>
     </>
   );
 }

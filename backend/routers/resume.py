@@ -119,6 +119,7 @@ async def get_resume(
 async def update_resume(
     resume_id: UUID,
     resume_data: ResumeUpdate,
+    
 
     current_user=Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
@@ -127,7 +128,7 @@ async def update_resume(
         Resume.id == resume_id,
         Resume.user_id == current_user.id,
     )
-
+    
     result = await db.execute(query)
 
     resume = result.scalar_one_or_none()
@@ -139,12 +140,14 @@ async def update_resume(
         )
 
     if resume_data.title is not None:
-        resume.title = resume_data.title
-        if resume_data.title is not None:
-         resume.title = resume_data.title
-        if resume_data.data is not None:
-         resume.data = resume_data.data
+     resume.title = resume_data.title
 
+    if resume_data.data is not None:
+     resume.data = resume_data.data
+
+    if resume_data.template is not None:
+     resume.template = resume_data.template
+    print("INCOMING TEMPLATE:", resume_data.template)
     await db.commit()
 
     await db.refresh(resume)

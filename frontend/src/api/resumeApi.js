@@ -50,3 +50,57 @@ export const deleteResume = async (
 
   return response.data;
 };
+
+export const downloadResumePdf = async (
+  resumeId
+) => {
+
+  const response = await axiosClient.get(
+
+    `/api/resumes/${resumeId}/export`,
+
+    {
+      responseType: "blob"
+    }
+  );
+
+
+  // Create downloadable file
+
+  const blob = new Blob(
+    [response.data],
+    {
+      type: "application/pdf"
+    }
+  );
+
+
+  // Create temporary URL
+
+  const url =
+    window.URL.createObjectURL(blob);
+
+
+  // Create hidden link
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+
+  link.download = "resume.pdf";
+
+
+  // Trigger download
+
+  document.body.appendChild(link);
+
+  link.click();
+
+
+  // Cleanup
+
+  link.remove();
+
+  window.URL.revokeObjectURL(url);
+};

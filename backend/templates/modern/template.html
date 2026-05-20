@@ -1,0 +1,135 @@
+<!-- templates/modern_professional/template.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ personalInfo.fullName }} - Resume</title>
+    <link
+  rel="stylesheet"
+  href="/templates/{{ template_name }}/style.css"
+/>
+</head>
+<body>
+
+    <header class="header">
+        <h1>{{ personalInfo.fullName }}</h1>
+        {% if personalInfo.title %}
+        <div class="job-title">{{ personalInfo.title }}</div>
+        {% endif %}
+        
+        <div class="contact-info">
+            {% if personalInfo.email %}
+            <span class="contact-item">{{ personalInfo.email }}</span>
+            {% endif %}
+            {% if personalInfo.phone %}
+            <span class="contact-item">| {{ personalInfo.phone }}</span>
+            {% endif %}
+            {% if personalInfo.location %}
+            <span class="contact-item">| {{ personalInfo.location }}</span>
+            {% endif %}
+            {% if personalInfo.website %}
+            <span class="contact-item">| {{ personalInfo.website }}</span>
+            {% endif %}
+        </div>
+    </header>
+
+    {% if summary %}
+    <section>
+        <h2>Professional Summary</h2>
+        <p style="margin: 0; font-size: 10.5pt;">{{ summary }}</p>
+    </section>
+    {% endif %}
+
+    {% if experience %}
+    <section>
+        <h2>Experience</h2>
+        {% for job in experience %}
+        <div class="experience-item">
+            <div class="item-header">
+                <h3>{{ job.title }}</h3>
+                <div class="date-location">
+                    {{ job.startDate }} - {{ job.endDate|default('Present') }}
+                </div>
+            </div>
+            <div class="item-subtitle">
+                {{ job.company }}{% if job.location %}, {{ job.location }}{% endif %}
+            </div>
+            {% if job.highlights %}
+            <ul>
+                {% for highlight in job.highlights %}
+                <li>{{ highlight }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if projects %}
+    <section>
+        <h2>Projects</h2>
+        {% for project in projects %}
+        <div class="project-item">
+            <div class="item-header">
+                <h3>{{ project.name }}</h3>
+                {% if project.date %}
+                <div class="date-location">{{ project.date }}</div>
+                {% endif %}
+            </div>
+            {% if project.technologies %}
+            <div class="item-subtitle">Tech: {{ project.technologies|join(', ') }}</div>
+            {% endif %}
+            {% if project.description %}
+<p>{{ project.description }}</p>
+{% endif %}
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if skills %}
+    <section>
+        <h2>Technical Skills</h2>
+        <div style="font-size: 10.5pt;">
+            <p>
+    {{ skills | join(', ') }}
+</p>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if education %}
+    <section>
+        <h2>Education</h2>
+        {% for edu in education %}
+        <div class="education-item">
+            <div class="item-header">
+                <h3>{{ edu.institution }}</h3>
+                <div class="date-location">{{ edu.graduationDate }}</div>
+            </div>
+            <div class="item-subtitle">{{ edu.degree }} in {{ edu.field }}</div>
+            {% if edu.gpa or edu.honors %}
+            <ul style="margin-top: 4px;">
+                {% if edu.gpa %}<li>GPA: {{ edu.gpa }}</li>{% endif %}
+                {% if edu.honors %}<li>{{ edu.honors }}</li>{% endif %}
+            </ul>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if certifications %}
+    <section>
+        <h2>Certifications</h2>
+        <ul>
+            {% for cert in certifications %}
+            <li><strong>{{ cert.name }}</strong> - {{ cert.issuer }} ({{ cert.date }})</li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+</body>
+</html>

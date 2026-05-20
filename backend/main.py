@@ -4,10 +4,16 @@ from routers.auth import router as auth_router
 from fastapi.middleware.cors import CORSMiddleware
 from routers.ai import router as ai_router
 from routers import export
+from fastapi.staticfiles import StaticFiles
 
 
 
 app = FastAPI()
+app.mount(
+    "/templates",
+    StaticFiles(directory="templates"),
+    name="templates"
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[

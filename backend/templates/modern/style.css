@@ -1,0 +1,114 @@
+/* templates/modern_professional/style.css */
+
+@page {
+    margin: 0.8in 0.8in;
+    size: letter portrait;
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1f2937; /* Tailwind gray-800 */
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+}
+
+/* Typography */
+h1 {
+    font-size: 24pt;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 4px 0;
+    letter-spacing: 0.5px;
+}
+
+h2 {
+    font-size: 14pt;
+    font-weight: 600;
+    color: #2c3e50; /* Subtle slate-blue accent */
+    margin: 16px 0 8px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #e5e7eb;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+h3 {
+    font-size: 12pt;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+/* Header / Personal Info */
+.header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.job-title {
+    font-size: 12pt;
+    color: #2c3e50;
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.contact-info {
+    font-size: 10pt;
+    color: #4b5563;
+}
+
+.contact-item {
+    display: inline-block;
+    margin: 0 6px;
+}
+
+/* Common Section Styles */
+section {
+    margin-bottom: 20px;
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+}
+
+.item-subtitle {
+    font-size: 10.5pt;
+    font-style: italic;
+    color: #4b5563;
+    margin: 0 0 4px 0;
+}
+
+.date-location {
+    font-size: 10pt;
+    color: #4b5563;
+    text-align: right;
+}
+
+/* Lists */
+ul {
+    margin: 0 0 12px 0;
+    padding-left: 18px;
+}
+
+li {
+    margin-bottom: 4px;
+    font-size: 10.5pt;
+}
+
+/* Skills */
+.skill-category {
+    margin-bottom: 6px;
+}
+
+.skill-name {
+    font-weight: 600;
+    color: #374151;
+}

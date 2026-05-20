@@ -1,36 +1,50 @@
 /* ═══════════════════════════════════════════════════════════════
-   Modern ATS Professional — style.css
-   WeasyPrint-safe · ATS-compatible · Single-column · A4
+   ATS Professional — style.css
+   Template:   ats_professional
+   Layout:     Pure single column
+   Accent:     Navy Blue #1a56a0
+   Font:       System font stack
+   Spacing:    Balanced
+   ATS Level:  Maximum (Google/Amazon parser safe)
+   WeasyPrint: Compatible
    ═══════════════════════════════════════════════════════════════ */
 
 /* ── Variables ───────────────────────────────────────────────── */
 :root {
-  --accent:        #1a56a0;      /* professional navy blue */
-  --accent-light:  #e8f0fb;
-  --text-primary:  #111827;
-  --text-secondary:#374151;
-  --text-muted:    #6b7280;
-  --divider:       #d1d5db;
-  --divider-top:   #1a56a0;
+  /* Brand */
+  --accent:           #1a56a0;
+  --accent-muted:     #d1dff5;
 
-  --font-body:     "Georgia", "Times New Roman", serif;
-  --font-sans:     "Helvetica Neue", "Helvetica", Arial, sans-serif;
+  /* Text scale */
+  --text-primary:     #0f172a;
+  --text-secondary:   #334155;
+  --text-muted:       #64748b;
 
-  --page-padding-v: 18mm;
-  --page-padding-h: 18mm;
+  /* Rules */
+  --rule-color:       #cbd5e1;
 
-  --size-name:     26pt;
-  --size-title:    11pt;
-  --size-contact:  9pt;
-  --size-section:  10pt;
-  --size-body:     9.5pt;
-  --size-date:     9pt;
+  /* System font stack — maximum ATS compatibility */
+  --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Helvetica, Arial, "Liberation Sans", sans-serif;
+
+  /* Type scale */
+  --size-name:        22pt;
+  --size-headline:    10.5pt;
+  --size-contact:     8.5pt;
+  --size-section:     9.5pt;
+  --size-body:        9.5pt;
+  --size-small:       8.5pt;
+
+  /* Spacing */
+  --section-gap:      11pt;
+  --entry-gap:        7pt;
+  --bullet-gap:       2.5pt;
 }
 
-/* ── Page / Reset ────────────────────────────────────────────── */
+/* ── Page ────────────────────────────────────────────────────── */
 @page {
   size: A4;
-  margin: var(--page-padding-v) var(--page-padding-h);
+  margin: 16mm 18mm 16mm 18mm;
 }
 
 * {
@@ -40,275 +54,229 @@
 }
 
 html, body {
-  font-family: var(--font-sans);
-  font-size: var(--size-body);
-  color: var(--text-primary);
-  background: #ffffff;
+  font-family:              var(--font-main);
+  font-size:                var(--size-body);
+  color:                    var(--text-primary);
+  background:               #ffffff;
+  line-height:              1.45;
   -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
+  print-color-adjust:         exact;
 }
 
-/* ── Page wrapper ────────────────────────────────────────────── */
 .page {
-  width: 100%;
+  width:     100%;
   max-width: 210mm;
-  margin: 0 auto;
+  margin:    0 auto;
 }
 
 /* ── HEADER ──────────────────────────────────────────────────── */
 .header {
-  text-align: center;
-  padding-bottom: 10pt;
+  text-align:    center;
+  padding-bottom: 9pt;
+  border-bottom: 2pt solid var(--accent);
+  margin-bottom: 10pt;
 }
 
 .name {
-  font-family: var(--font-sans);
-  font-size: var(--size-name);
-  font-weight: 700;
-  color: var(--text-primary);
+  font-family:    var(--font-main);
+  font-size:      var(--size-name);
+  font-weight:    700;
+  color:          var(--text-primary);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height:    1.1;
+}
+
+.headline {
+  font-size:      var(--size-headline);
+  font-weight:    400;
+  color:          var(--accent);
+  margin-top:     3pt;
   letter-spacing: 0.04em;
-  line-height: 1.1;
-  text-transform: uppercase;
 }
 
-.title {
-  font-family: var(--font-sans);
-  font-size: var(--size-title);
-  font-weight: 400;
-  color: var(--accent);
-  margin-top: 3pt;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.contact-row {
-  margin-top: 6pt;
-  font-size: var(--size-contact);
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-.contact-item {
-  display: inline;
-}
-
-.contact-sep {
-  display: inline;
-  margin: 0 5pt;
-  color: var(--accent);
-  font-weight: 700;
-}
-
-/* ── TOP DIVIDER ─────────────────────────────────────────────── */
-.divider-top {
-  height: 2.5pt;
-  background-color: var(--divider-top);
-  margin: 8pt 0 0 0;
+.contact-line {
+  font-size:   var(--size-contact);
+  color:       var(--text-muted);
+  margin-top:  5pt;
+  line-height: 1.5;
 }
 
 /* ── SECTION ─────────────────────────────────────────────────── */
 .section {
-  margin-top: 12pt;
+  margin-top:        var(--section-gap);
   page-break-inside: avoid;
 }
 
 .section-title {
-  font-family: var(--font-sans);
-  font-size: var(--size-section);
-  font-weight: 700;
-  color: var(--accent);
+  font-family:    var(--font-main);
+  font-size:      var(--size-section);
+  font-weight:    700;
+  color:          var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.10em;
-  padding-bottom: 3pt;
-  border-bottom: 1pt solid var(--divider);
-  margin-bottom: 7pt;
+  margin-bottom:  3pt;
+}
+
+.section-rule {
+  height:           1pt;
+  background-color: var(--rule-color);
+  margin-bottom:    6pt;
 }
 
 /* ── SUMMARY ─────────────────────────────────────────────────── */
-.summary-text {
-  font-family: var(--font-sans);
-  font-size: var(--size-body);
-  color: var(--text-secondary);
+.summary-body {
+  font-size:   var(--size-body);
+  color:       var(--text-secondary);
   line-height: 1.55;
 }
 
 /* ── SKILLS ──────────────────────────────────────────────────── */
-.skills-block {
+.skills-grouped {
   display: block;
 }
 
-.skill-group {
-  display: block;
-  margin-bottom: 3pt;
-  font-size: var(--size-body);
-  line-height: 1.5;
+.skill-row {
+  display:       block;
+  font-size:     var(--size-body);
+  color:         var(--text-secondary);
+  line-height:   1.5;
+  margin-bottom: 2pt;
 }
 
-.skill-category {
-  font-weight: 700;
-  color: var(--text-primary);
+.skill-cat {
+  font-weight:  700;
+  color:        var(--text-primary);
   margin-right: 4pt;
 }
 
-.skill-items {
+.skill-vals {
   color: var(--text-secondary);
 }
 
-/* ── ENTRY (Experience, Projects, Education) ─────────────────── */
+.skills-flat {
+  font-size:   var(--size-body);
+  color:       var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* ── ENTRY (Experience / Projects / Education) ───────────────── */
 .entry {
-  margin-bottom: 9pt;
+  margin-bottom:     var(--entry-gap);
   page-break-inside: avoid;
 }
 
-.entry-header {
+/* Float-based two-col header row — WeasyPrint safe, no flexbox */
+.entry-head,
+.cert-row {
   display: block;
-  width: 100%;
-  overflow: hidden;       /* clearfix for float layout — WeasyPrint safe */
+  width:   100%;
+}
+
+.entry-head::after,
+.cert-row::after {
+  content: "";
+  display: table;
+  clear:   both;
 }
 
 .entry-left {
-  float: left;
-  max-width: 72%;
+  float:     left;
+  max-width: 74%;
 }
 
 .entry-right {
-  float: right;
+  float:      right;
+  max-width:  26%;
   text-align: right;
-  max-width: 28%;
 }
 
-/* Clearfix */
-.entry-header::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-.entry-primary {
-  display: block;
-  font-size: var(--size-body);
+.entry-role {
+  display:     block;
+  font-size:   var(--size-body);
   font-weight: 700;
-  color: var(--text-primary);
-  line-height: 1.35;
-}
-
-.entry-secondary {
-  display: block;
-  font-size: var(--size-body);
-  color: var(--text-secondary);
+  color:       var(--text-primary);
   line-height: 1.3;
-  margin-top: 1pt;
 }
 
-.tech-stack {
-  font-style: italic;
-  color: var(--text-muted);
-}
-
-.entry-link {
+.entry-url {
   font-weight: 400;
-  color: var(--accent);
-  font-size: 8.5pt;
+  color:       var(--accent);
+  font-size:   var(--size-small);
+}
+
+.entry-org {
+  display:     block;
+  font-size:   var(--size-body);
+  color:       var(--text-secondary);
+  line-height: 1.3;
+  margin-top:  1pt;
+}
+
+.entry-org.tech {
+  font-style: italic;
+  color:      var(--text-muted);
+  font-size:  var(--size-small);
 }
 
 .entry-date {
-  display: block;
-  font-size: var(--size-date);
-  color: var(--text-muted);
-  font-style: italic;
-  line-height: 1.35;
-  margin-top: 1pt;
+  display:     block;
+  font-size:   var(--size-small);
+  color:       var(--text-muted);
+  font-style:  italic;
+  line-height: 1.3;
+  margin-top:  1pt;
   white-space: nowrap;
 }
 
-.entry-description {
-  font-size: var(--size-body);
-  color: var(--text-secondary);
+.entry-desc {
+  font-size:   var(--size-body);
+  color:       var(--text-secondary);
   line-height: 1.5;
-  margin-top: 3pt;
+  margin-top:  3pt;
 }
 
-/* ── BULLET LIST ─────────────────────────────────────────────── */
-.bullet-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 4pt;
+/* ── BULLETS ─────────────────────────────────────────────────── */
+.bullets {
+  list-style:  none;
+  padding:     0;
+  margin-top:  4pt;
 }
 
-.bullet-list li {
-  position: relative;
-  padding-left: 10pt;
-  font-size: var(--size-body);
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 2.5pt;
+.bullets li {
+  position:      relative;
+  padding-left:  11pt;
+  font-size:     var(--size-body);
+  color:         var(--text-secondary);
+  line-height:   1.5;
+  margin-bottom: var(--bullet-gap);
 }
 
-.bullet-list li::before {
-  content: "–";
-  position: absolute;
-  left: 0;
-  color: var(--accent);
-  font-weight: 700;
+.bullets li::before {
+  content:    "▪";
+  position:   absolute;
+  left:       0;
+  color:      var(--accent);
+  font-size:  7pt;
+  line-height: 1.9;  /* vertically center the small square */
 }
 
 /* ── CERTIFICATIONS ──────────────────────────────────────────── */
 .cert-row {
-  display: block;
-  width: 100%;
-  overflow: hidden;
   margin-bottom: 4pt;
   page-break-inside: avoid;
 }
 
-.cert-left {
-  float: left;
-  max-width: 72%;
-}
-
-.cert-right {
-  float: right;
-  text-align: right;
-  max-width: 28%;
-}
-
-.cert-row::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-.cert-name {
-  display: block;
-  font-size: var(--size-body);
-  font-weight: 700;
-  color: var(--text-primary);
-  line-height: 1.35;
-}
-
-.cert-issuer {
-  display: block;
-  font-size: var(--size-body);
-  color: var(--text-secondary);
-  line-height: 1.3;
-}
-
-/* ── PRINT SAFETY ────────────────────────────────────────────── */
+/* ── PRINT ───────────────────────────────────────────────────── */
 @media print {
-  .page {
-    max-width: none;
-  }
+  .page { max-width: none; }
 
-  .section {
-    page-break-inside: avoid;
-  }
-
-  .entry {
-    page-break-inside: avoid;
-  }
+  .section,
+  .entry,
+  .cert-row { page-break-inside: avoid; }
 
   a {
-    color: inherit;
+    color:           inherit;
     text-decoration: none;
   }
 }

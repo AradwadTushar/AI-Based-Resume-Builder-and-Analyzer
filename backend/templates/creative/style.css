@@ -1,0 +1,169 @@
+/* WeasyPrint Page Setup */
+@page {
+    size: letter;
+    margin: 0; /* Remove default page margins to allow full bleed */
+    /* Creates a seamless full-height sidebar color across multi-page PDFs */
+    background: linear-gradient(to right, #1e293b 0%, #1e293b 32%, #ffffff 32%, #ffffff 100%);
+}
+
+body {
+    font-family: "Helvetica", "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #334155;
+    font-size: 10pt;
+    line-height: 1.5;
+}
+
+/* Base Layout using standard floats for bulletproof PDF generation */
+.resume-wrapper {
+    width: 100%;
+}
+
+.sidebar {
+    float: left;
+    width: 26%;
+    padding: 40px 3%;
+    color: #f8fafc;
+    box-sizing: border-box;
+}
+
+.main-content {
+    float: right;
+    width: 68%;
+    padding: 40px 4% 40px 0;
+    box-sizing: border-box;
+}
+
+/* Clearfix */
+.resume-wrapper::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Sidebar Styling */
+.profile-img-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #334155;
+}
+
+.sidebar-section {
+    margin-bottom: 30px;
+}
+
+.sidebar h2 {
+    font-size: 12pt;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    color: #94a3b8;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 5px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-list li, .skills-list li, .certs-list li {
+    margin-bottom: 10px;
+    font-size: 9.5pt;
+    line-height: 1.4;
+}
+
+.text-sm {
+    font-size: 8.5pt;
+    color: #cbd5e1;
+}
+
+/* Main Content Styling */
+.header {
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 32pt;
+    margin: 0 0 5px 0;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+}
+
+.job-title {
+    font-size: 14pt;
+    color: #059669; /* Emerald 600 accent */
+    margin: 0;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.section {
+    margin-bottom: 25px;
+}
+
+.section-title {
+    font-size: 14pt;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.summary-text {
+    margin: 0;
+    text-align: justify;
+}
+
+/* Timeline / Entries */
+.timeline-item {
+    margin-bottom: 20px;
+}
+
+.timeline-header {
+    display: flex; /* WeasyPrint supports basic flex */
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 3px;
+}
+
+.timeline-header h3 {
+    margin: 0;
+    font-size: 12pt;
+    color: #0f172a;
+}
+
+.date {
+    font-size: 9.5pt;
+    color: #64748b;
+    font-weight: bold;
+}
+
+.company {
+    font-size: 10.5pt;
+    color: #059669; /* Match job title accent */
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.description {
+    margin: 0;
+}
+
+.project-link {
+    font-size: 9pt;
+    color: #0284c7;
+    text-decoration: none;
+}
