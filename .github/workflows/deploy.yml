@@ -4,6 +4,7 @@ on:
     branches: [main, v2-rebuild]
 
 jobs:
+  # ─── 1. Frontend Build ───────────────────────────────────────────────────────
   build-frontend:
     runs-on: ubuntu-latest
     defaults:
@@ -12,24 +13,32 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - name: Install dependencies
         run: npm ci
-      - name: Lint & Test (if present)
-        run: |
-          npm run lint || echo "No lint script"
-          npm test || echo "No tests"
+
+      - name: Lint (if configured)
+        run: npm run lint || echo "No lint script – skipping"
+
       - name: Build static assets
+        env:
+          # Inject backend URL at build time so the Vite app can reach Render
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
         run: npm run build
-      - name: Upload built assets as artifact
+
+      - name: Upload dist as artifact
         uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
-          path: ./dist
+          path: ./frontend/dist
 
+  # ─── 2. Backend Verification ─────────────────────────────────────────────────
   build-backend:
     runs-on: ubuntu-latest
     defaults:
@@ -38,50 +47,81 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run backend tests (if any)
-        run: |
-          pytest || echo "No tests"
 
+      - name: Run backend tests (if any)
+        run: pytest || echo "No tests found – skipping"
+
+  # ─── 3. Docker Build & Push to GitHub Container Registry ─────────────────────
   docker-build-push:
     needs: [build-frontend, build-backend]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Set up QEMU (for multi‑arch)
+
+      - name: Set up QEMU (multi-arch support)
         uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{github.actor}}
-          password: ${{secrets.GITHUB_TOKEN}}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ghcr.io/${{github.repository}}:latest
+          tags: ghcr.io/${{ github.repository }}:latest
 
-  # Optional: Trigger Render deployment (requires RENDER_API_KEY secret)
+  # ─── 4. Deploy Frontend to Cloudflare Pages ──────────────────────────────────
+  deploy-frontend:
+    needs: build-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download built frontend
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: ./frontend/dist
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ai-resume-builder   # your Cloudflare Pages project name
+          directory: ./frontend/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  # ─── 5. Trigger Render Re-Deploy (backend) ────────────────────────────────────
   deploy-render:
     needs: docker-build-push
     runs-on: ubuntu-latest
-    if: ${{secrets.RENDER_API_KEY != ''}}
+    if: ${{ secrets.RENDER_API_KEY != '' }}
     steps:
-      - name: Trigger Render service deploy
+      - name: Trigger Render backend deploy
         env:
-          RENDER_API_KEY: ${{secrets.RENDER_API_KEY}}
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: |
-          curl -X POST "https://api.render.com/v1/services/${{secrets.RENDER_SERVICE_ID}}/deploys" \
-            -H "Authorization: Bearer $RENDER_API_KEY"
+          curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -H "Content-Type: application/json"

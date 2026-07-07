@@ -6,6 +6,7 @@ from routers.ai import router as ai_router
 from routers.analyze import router as analyze_router
 from routers import export
 from fastapi.staticfiles import StaticFiles
+import os
 
 
 
@@ -15,11 +16,16 @@ app.mount(
     StaticFiles(directory="templates"),
     name="templates"
 )
+# Read extra allowed origins from env (comma-separated)
+_extra_origins = os.getenv("ALLOWED_ORIGINS", "")
+_allowed_origins = [
+    "http://localhost:5173",
+    *[o.strip() for o in _extra_origins.split(",") if o.strip()],
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-    ],
+    allow_origins=_allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
