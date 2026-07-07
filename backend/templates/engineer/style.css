@@ -270,7 +270,6 @@ html, body {
 @media print {
   .page { max-width: none; }
 
-  .section,
   .entry,
   .cert-row { page-break-inside: avoid; }
 

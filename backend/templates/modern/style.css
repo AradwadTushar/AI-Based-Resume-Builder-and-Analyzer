@@ -305,7 +305,6 @@ html, body {
 /* ── PRINT ───────────────────────────────────────────────────── */
 @media print {
   .page      { width: 210mm; }
-  .section,
   .entry,
   .cert-row  { page-break-inside: avoid; }
   a          { color: inherit; text-decoration: none; }
