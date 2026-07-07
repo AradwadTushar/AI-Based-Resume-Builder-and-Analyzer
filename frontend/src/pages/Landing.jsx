@@ -31,13 +31,13 @@ function Landing() {
           </SignedIn>
           <SignedOut>
             <Link 
-              to="/dashboard" 
+              to="/sign-in" 
               className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-semibold text-sm transition px-3 py-2"
             >
               Sign In
             </Link>
             <Link 
-              to="/dashboard" 
+              to="/sign-up" 
               className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-xl text-sm transition shadow-md"
             >
               Get Started Free

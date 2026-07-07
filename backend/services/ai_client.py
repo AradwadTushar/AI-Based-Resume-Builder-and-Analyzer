@@ -1,20 +1,9 @@
 import os
 import json
 import requests
-from config import settings
 
-# Load environment variable to decide which provider to use
-AI_PROVIDER = os.getenv("AI_PROVIDER", "gemini").lower()
-
-# ------- Gemini (default) -------------------------------------------------
-# The original Gemini model is still used for local development.
-# We keep the import here to avoid pulling it in when using Ollama.
-try:
-    import google.generativeai as genai
-    genai.configure(api_key=settings.GEMINI_API_KEY)
-    _gemini_model = genai.GenerativeModel("gemini-3.1-flash-lite")
-except Exception:
-    _gemini_model = None
+# Cache for the Gemini model instance to ensure we only configure it once
+_gemini_model = None
 
 # ------- Ollama client ----------------------------------------------------
 class OllamaClient:
@@ -41,16 +30,32 @@ class OllamaClient:
         except Exception as e:
             raise RuntimeError(f"Ollama request failed: {e}")
 
-# ------- Factory ----------------------------------------------------------
+# ------- Factory (Lazy Initialization) ------------------------------------
 def get_model():
     """Return an object exposing ``generate_content(prompt)``.
+    Uses lazy loading to prevent crashes at module import time.
 
     * If ``AI_PROVIDER`` == ``ollama`` → use :class:`OllamaClient`.
     * Otherwise fall back to the Gemini model (if available).
     """
-    if AI_PROVIDER == "ollama":
+    global _gemini_model
+    
+    ai_provider = os.getenv("AI_PROVIDER", "gemini").lower()
+    
+    if ai_provider == "ollama":
         return OllamaClient()
-    # Fallback to Gemini – raise a clear error if not configured.
+        
     if _gemini_model is None:
-        raise RuntimeError("Gemini model is not configured. Check GEMINI_API_KEY.")
+        try:
+            from config import settings
+            import google.generativeai as genai
+            
+            if not settings.GEMINI_API_KEY:
+                raise ValueError("GEMINI_API_KEY is empty or missing")
+                
+            genai.configure(api_key=settings.GEMINI_API_KEY)
+            _gemini_model = genai.GenerativeModel("gemini-3.1-flash-lite")
+        except Exception as e:
+            raise RuntimeError(f"Gemini model is not configured properly: {e}")
+            
     return _gemini_model
