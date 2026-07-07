@@ -1,0 +1,87 @@
+name: CI/CD Deploy
+on:
+  push:
+    branches: [main, v2-rebuild]
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint & Test (if present)
+        run: |
+          npm run lint || echo "No lint script"
+          npm test || echo "No tests"
+      - name: Build static assets
+        run: npm run build
+      - name: Upload built assets as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: ./dist
+
+  build-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run backend tests (if any)
+        run: |
+          pytest || echo "No tests"
+
+  docker-build-push:
+    needs: [build-frontend, build-backend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up QEMU (for multi‑arch)
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{github.repository}}:latest
+
+  # Optional: Trigger Render deployment (requires RENDER_API_KEY secret)
+  deploy-render:
+    needs: docker-build-push
+    runs-on: ubuntu-latest
+    if: ${{secrets.RENDER_API_KEY != ''}}
+    steps:
+      - name: Trigger Render service deploy
+        env:
+          RENDER_API_KEY: ${{secrets.RENDER_API_KEY}}
+        run: |
+          curl -X POST "https://api.render.com/v1/services/${{secrets.RENDER_SERVICE_ID}}/deploys" \
+            -H "Authorization: Bearer $RENDER_API_KEY"

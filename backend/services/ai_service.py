@@ -1,10 +1,8 @@
-import google.generativeai as genai
 import json
 from config import settings
+from .ai_client import get_model
 
-genai.configure(api_key=settings.GEMINI_API_KEY)
-
-model = genai.GenerativeModel("gemini-3.1-flash-lite")
+model = get_model()
 
 
 def _clean_json_response(text: str) -> str:
