@@ -1,213 +1,313 @@
-# AI Resume Builder & Analyzer v2
 
-An intelligent AI-powered resume platform built using **React, FastAPI, PostgreSQL, Jinja2, and WeasyPrint**.
 
-The project focuses on building a scalable resume ecosystem with:
+```markdown
+<div align="center">
 
-* Dynamic resume templates
-* Realtime editing & autosave
-* AI-powered resume analysis
-* ATS-friendly PDF generation
-* Job description matching
-* Profession-aware resume systems
+<img src="frontend/src/assets/ResumeIQ Logo Colored.png" alt="ResumeIQ AI Logo" width="120"/>
 
----
+# ResumeIQ AI
 
-# 🚀 Current Status
+### AI-Powered Resume Builder, ATS Optimization & Analytics Engine
 
-### ✅ Completed
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.x-009688?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-JSONB-4169E1?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![Clerk](https://img.shields.io/badge/Clerk-Auth-6C47FF?style=flat&logo=clerk&logoColor=white)](https://clerk.com)
+[![Gemini](https://img.shields.io/badge/Gemini_1.5_Flash-Google-4285F4?style=flat&logo=google&logoColor=white)](https://ai.google.dev)
+[![Docker](https://img.shields.io/badge/Docker-Container-2496ED?style=flat&logo=docker&logoColor=white)](https://docker.com)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
 
-* Authentication System (Clerk)
-* Resume CRUD APIs
-* React Resume Editor
-* Autosave Architecture
-* Dynamic Template Switching
-* Backend Rendering Pipeline
-* Export Preview Modal
-* Styled PDF Export (Jinja2 + WeasyPrint)
-* React Live Preview System
-* Dynamic Template Registry
+**Transform your resume with an industry-aware live editor, instant ATS scoring, semantic keyword intelligence, and premium exports.**
 
-### 🚧 In Progress
+[Features](#-features) • [Demo](#-demo) • [Architecture](#-architecture) • [Setup](#-setup) • [API](#-api-reference) • [Team](#-team)
 
-* Intelligent Resume Composition System
-* Dynamic Profession-Based Sections
-* Resume Analyzer Pipeline
-* ATS Scoring Engine
-* JD Matching System
+</div>
 
 ---
 
-# 🛠 Tech Stack
+## 📌 What is ResumeIQ AI?
 
-## Frontend
+ResumeIQ AI is a production-ready, full-stack web application designed to move beyond traditional flat forms into an **industry-aware document editor and parsing platform**[cite: 3, 5, 6]. It provides users with two core paths: a smart, real-time resume builder with contextual AI workflows, and a standalone PDF analyzer that extracts, semantic-matches, and scores existing resumes against modern ATS standards[cite: 4, 5, 7].
 
-* React
-* TailwindCSS
-* Vite
-* Clerk Authentication
-
-## Backend
-
-* FastAPI
-* PostgreSQL
-* SQLAlchemy Async
-* Jinja2
-* WeasyPrint
-
-## AI / Future Systems
-
-* Gemini API
-* Resume Analysis
-* ATS Optimization
-* JD Matching
+Built using a highly decoupled, stateful async backend and a sleek glass-morphism dark-mode UI, the application features an isolated cross-platform hybrid rendering ecosystem ensuring what you see in the browser matches your generated PDF export pixel-for-pixel[cite: 3, 6, 9, 10].
 
 ---
 
-# 🧠 Core Features
+## ✨ Features
 
-## Dynamic Resume Templates
+### 🛠️ Intelligent Resume Builder
+- **✨ Swappable Theme Registry** — Seamlessly shift between multiple ATS-safe, clean layouts (`engineer`, `modern`, `creative`, `photo_professional`) on the fly[cite: 6, 8].
+- **🔄 Dynamic Section Registry** — Form fields, section headers, and preview schemas adapt instantly based on the chosen profession archetype (e.g., renames "Projects" to "Portfolio" for Designers or "Experience" to "Clinical Experience" for Medical tracks)[cite: 5, 6].
+- **⏱️ Debounced Autosave System** — State updates persist in-flight to a PostgreSQL `JSONB` schema, minimizing backend API spam while protecting drafting flow[cite: 3, 6].
+- **📸 Passport Photo Compression** — Clean native uploader converting square images into efficient Base64 data strings seamlessly embedded into the document's profile state[cite: 8].
 
-Supports multiple resume designs:
-
-* Engineer
-* Modern
-* Creative
-
-with scalable template architecture.
-
----
-
-## Realtime Resume Editing
-
-* Instant preview updates
-* Autosave functionality
-* Dynamic section rendering
+### 🧠 AI Analytics & Optimization
+- **🔍 PDF Parsing Pipeline** — Local high-speed textual extractions using `pdfminer.six` directly inside the Python environment—zero dependency on external parsers[cite: 5, 7].
+- **🎯 Semantic Keyword Matching** — Leverages LLM context to look beyond strict string matching, recognizing conceptual structural equivalence (e.g., maps `FastAPI` context directly to `REST Backend Development`)[cite: 4].
+- **📊 Circular Visual Scorecard** — Animated dashboard featuring visual score indicators, contextual red-tag missing keyword chips, and side-by-side phrasing comparison differentials[cite: 4, 5].
+- **💾 Historical Analytics Archive** — A dedicated chronological tracking page for looking back at past uploads, scores, and targeted feedback trends with safe execution modals[cite: 8].
 
 ---
 
-## Export Preview System
+## 🎬 Demo
 
-Before downloading:
+> 🎬 *Add your premium UI interaction GIF here — record a 30-second form-to-PDF flow.*
+![alt text](<ResumeIQ Optimization.gif>)
 
-```text id="rd1"
-Editor
-↓
-Backend-rendered Preview
-↓
-Styled PDF Export
+
 ```
 
-This ensures export accuracy and rendering consistency.
+Upload PDF / Fill Form → Dynamic Categorization → AI Optimization → Export Validation Preview → Final PDF Download
 
----
-
-# 📄 PDF Rendering Pipeline
-
-The project uses:
-
-* Jinja2 HTML templates
-* CSS-based styling
-* WeasyPrint PDF generation
-
-for ATS-friendly exports.
-
----
-
-# 🏗 Project Architecture
-
-```text id="rd2"
-Frontend (React)
-↓
-Autosave + API
-↓
-FastAPI Backend
-↓
-PostgreSQL
-↓
-Jinja2 Rendering
-↓
-WeasyPrint
-↓
-Styled PDF Export
 ```
 
 ---
 
-# 📌 Planned Features
+## 🏗 Architecture
 
-## Intelligent Resume Composition
+### Hybrid Rendering & Data Lifecycle Flow
 
-* Profession-aware resumes
-* Dynamic editor sections
-* Role-based rendering
-* Shared visual templates
+```
 
-## Resume Analyzer
+┌─────────────────────────────────────────────────────────────┐
+│                  FRONTEND (React + Vite + Tailwind)         │
+│                                                               │
+│   Landing → Dashboard → Editor Workspace → History Log       │
+│                                                               │
+│   State Changes ──► [Debounced Hook Timeout]                  │
+│                            │                                  │
+│                            ▼                                  │
+│            PUT /api/resumes/{id} (JSONB Schema + JWT)         │
+└────────────────────────────┬──────────────────────────────────┘
+│ Axios Interceptors (Clerk Token)
+┌────────────────────────────▼──────────────────────────────────┐
+│                    BACKEND (FastAPI Async)                    │
+│                                                               │
+│   /auth/verify   ──► Maps external token to PostgreSQL row    │
+│   /resumes/crud  ──► Persists multi-user ownership state      │
+│   /analyze       ──► Extracts PDF text via pdfminer.six       │
+│   /export        ──► normalizes context via Template Registry │
+│                        │                                      │
+│                        ▼                                      │
+│             [Jinja2 HTML Compiling Engine]                    │
+│                        │                                      │
+│                        ▼                                      │
+│             [WeasyPrint Local PDF Transpiler]                 │
+└────────────────────────────┬──────────────────────────────────┘
+│
+┌────────────────────────────▼──────────────────────────────────┐
+│                    PRODUCTION DATA STORAGE                    │
+│                                                               │
+│   PostgreSQL (JSONB Documents + Secure Auth Mappings)         │
+└───────────────────────────────────────────────────────────────┘
 
-* ATS scoring
-* Resume parsing
-* JD matching
-* AI optimization suggestions
+```
 
 ---
 
-# ⚡ Setup
+## 🛠 Tech Stack
 
-## Frontend
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | React 18, Vite, TailwindCSS, Axios, Lucide Icons[cite: 7, 10] |
+| **Authentication** | Clerk Security Framework (Stateless Identity Layer / Asymmetric RS256 Verification)[cite: 2, 7] |
+| **Backend** | FastAPI, Uvicorn ASGI Server, Pydantic v2[cite: 2, 7] |
+| **Database/ORM** | PostgreSQL, Async SQLAlchemy 2.0, Alembic Migrations, JSONB Storage[cite: 2, 7] |
+| **PDF Engineering** | WeasyPrint, Jinja2 Template Injections, `pdfminer.six`[cite: 6, 7] |
+| **AI Intelligence** | Google Gemini 1.5 Flash / Ollama Client Wrapper (Factory Provider Pattern)[cite: 8, 10] |
+| **Containerization** | Docker, Docker Compose (Multi-arch automated standard)[cite: 10] |
 
-```bash id="rd3"
-cd frontend
-npm install
-npm run dev
+---
+
+## ⚙️ Setup
+
+### Prerequisites
+- Python 3.12+[cite: 10]
+- Node.js 20+[cite: 10]
+- PostgreSQL database engine[cite: 2]
+- Google Gemini API Key or a local Ollama server deployment[cite: 8, 10]
+
+---
+
+### 1. Project Initialization
+```bash
+git clone [https://github.com/AradwadTushar/ai-based-resume-builder-v2.git](https://github.com/AradwadTushar/ai-based-resume-builder-v2.git)
+cd ai-resume-v2
+
 ```
 
-## Backend
+---
 
-```bash id="rd4"
+### 2. Backend Environment Assembly
+
+```bash
 cd backend
 
-# create virtual env
+# Establish Python environment
 python -m venv .venv
+source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
 
-# activate
-.venv\Scripts\activate
-
-# install dependencies
+# Install locked dependencies
 pip install -r requirements.txt
 
-# run server
-uvicorn main:app --reload
+```
+
+Create a `backend/.env` configuration file:
+
+```env
+DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/resumeiq_db
+CLERK_SECRET_KEY=sk_test_...
+GEMINI_API_KEY=AIzaSy...
+AI_PROVIDER=gemini  # Switch to 'ollama' for free self-hosted production scaling
+CORS_ORIGINS=http://localhost:5173
+
+```
+
+Execute schema migrations and boot the server:
+
+```bash
+alembic upgrade head
+uvicorn main:app --reload --host 127.0.0.1 --port 8000
+
 ```
 
 ---
 
-# 📂 Project Structure
+### 3. Frontend Compilation
 
-```text id="rd5"
-frontend/
-backend/
+```bash
+cd ../frontend
 
-backend/templates/
-├── engineer/
-├── modern/
-├── creative/
+# Install node dependencies
+npm install
+
+# Initialize tailwind design bindings
+npx shadcn@latest init
+
+```
+
+Create a `frontend/.env.local` configuration file:
+
+```env
+VITE_API_BASE_URL=http://localhost:8000
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
+
+```
+
+Execute development client workspace:
+
+```bash
+npm run dev
+
 ```
 
 ---
 
-# 🎯 Vision
+### 4. Containerized Execution (Optional alternative)
 
-The goal is to build a complete intelligent resume ecosystem that combines:
+To stand up the complete network layer including a local open-source LLM model sidecar configuration:
 
-* scalable rendering systems
-* AI-powered analysis
-* profession-aware resume generation
-* ATS optimization
-* modern UX
+```bash
+docker-compose up --build
+
+```
 
 ---
 
-# 👨‍💻 Author
+## 📡 API Reference
 
-Tushar Aradwad
+All protected application routes enforce rigid parameter cross-checking ensuring that executing operations match user data signatures implicitly extracted via backend-validated verification steps (`Resume.user_id == current_user.id`).
+
+| Method | Route | Description |
+| --- | --- | --- |
+| `POST` | `/api/auth/verify` | Authenticates Clerk token, provisions internal system row mapping if new.
+
+ |
+| `GET` | `/api/resumes` | Retrieves summary collections associated with the user payload.
+
+ |
+| `POST` | `/api/resumes` | Generates a fresh structural database record initialized with raw skeleton states.
+
+ |
+| `PUT` | `/api/resumes/{id}` | Persists user modifications directly to nested JSONB documents.
+
+ |
+| `DELETE` | `/api/resumes/{id}` | Destroys resume tracking node safely away from collection frameworks.
+
+ |
+| `POST` | `/api/resumes/{id}/generate` | Invokes prompt injection sequences to format descriptions into clear ATS bullet points.
+
+ |
+| `GET` | `/api/resumes/{id}/export` | Compiles real-time Jinja configurations into raw streaming PDF data.
+
+ |
+| `POST` | `/api/analyze` | Processes multi-part document extractions against custom target descriptions.
+
+ |
+| `GET` | `/api/analyze/history` | Fetches historical log array collections for user workspace visibility.
+
+ |
+
+---
+
+## 📁 Project Structure
+
+```
+ai-resume-v2/
+├── backend/                        # FastAPI Enterprise Engine
+│   ├── main.py                     # Lifecycle configurations, CORS routing, Middleware[cite: 7]
+│   ├── config.py                   # Strict system variables parsing using Pydantic[cite: 7]
+│   ├── database.py                 # Async transactional operations management[cite: 2, 7]
+│   ├── models/                     # Relational definitions mapped using SQLAlchemy[cite: 2, 7]
+│   ├── schemas/                    # Type validations & structural boundaries[cite: 2, 7]
+│   ├── routers/                    # Clean endpoints layer isolation[cite: 2, 7]
+│   ├── services/                   # Decoupled AI workflows, parsing, and rendering engines[cite: 2, 7]
+│   └── templates/                  # Modular compilation frameworks (HTML / CSS components)[cite: 6, 7]
+├── frontend/                       # Interactive User Interfaces
+│   ├── src/
+│   │   ├── api/                    # Centralized request modules powered by Axios[cite: 3, 7]
+│   │   ├── components/             # Reusable UX, loaders, structures, modals[cite: 3, 7]
+│   │   ├── features/               # Modular interfaces for Editor and Analyzer panels[cite: 7]
+│   │   ├── pages/                  # Top-level viewport rendering anchors[cite: 7]
+│   │   └── context/                # Unidirectional global state configuration[cite: 7]
+└── .github/workflows/              # Robust Continuous Integration / Continuous Deployment
+    └── deploy.yml                  # Automated compilation, testing, and multi-arch Docker distribution[cite: 10]
+
+```
+
+---
+
+## 🔒 Security Architectures
+
+* **Client Disbelief Matrix** — Identities are never trusted explicitly via simple client strings; all validation sequences map securely from cryptographically verified asymmetric signatures.
+
+
+* **IDOR Fortress Constraints** — SQL queries crosscheck context parameters inside the transactional execution layer, rendering data poisoning vectors impotent.
+
+
+* **Server-Shielded Variable Protocols** — Crucial operations credentials (Gemini, Database strings) are constrained safely back behind backend borders, completely hidden from client inspection.
+
+
+
+---
+
+## 👥 Team
+
+* **Tushar Aradwad** - *System Architect / AI & Core Backend Engineer*
+[@AradwadTushar](https://www.google.com/search?q=https://github.com/AradwadTushar) | [LinkedIn Profile](https://www.google.com/search?q=https://www.linkedin.com/in/tushar-aradwad-536570307)
+
+
+---
+
+## 📄 License
+
+This repository is shared safely open for development and modifications under the terms of the MIT License — review the [LICENSE](https://www.google.com/search?q=/LICENSE) document for exact terms.
+
+---
+
+Crafted with premium UI intent by Team ResumeIQ | Final Year Project Excellence
+
+*"Elevating professional identity through structural algorithmic intelligence."*
+
+---
