@@ -9,7 +9,7 @@ function ExportPreviewModal({
   onDownload
 
 }) {
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [
 
     iframeLoading,
@@ -127,21 +127,11 @@ function ExportPreviewModal({
 
 
   <iframe
-
-    title="Resume Preview"
-
-    src={
-      `http://localhost:8000/api/resumes/${resumeId}/preview`
-    }
-
-    className="
-      w-full h-full border-0
-    "
-
-    onLoad={() =>
-      setIframeLoading(false)
-    }
-  />
+  title="Resume Preview"
+  src={`${API_BASE_URL}/api/resumes/${resumeId}/preview`}
+  className="w-full h-full border-0"
+  onLoad={() => setIframeLoading(false)}
+/>
 
 </div>
 

@@ -232,7 +232,6 @@ html, body {
 /* ── SECTION ─────────────────────────────────────────────────── */
 .section {
   margin-top:        var(--section-gap);
-  page-break-inside: avoid;
 }
 
 .section:first-child {
