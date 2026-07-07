@@ -46,3 +46,11 @@ export const analyzeATS = async (
 
   return response.data;
 };
+
+export const generateCoverLetter = async (payload) => {
+  const response = await axiosClient.post(
+    "/api/ai/cover-letter",
+    payload
+  );
+  return response.data;
+};

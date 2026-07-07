@@ -1,0 +1,295 @@
+/* ══════════════════════════════════════
+   PHOTO PROFESSIONAL TEMPLATE CSS
+   ══════════════════════════════════════ */
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #1e293b;
+  background-color: #ffffff;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  width: 210mm;
+  height: 297mm;
+  overflow: hidden;
+  position: relative;
+}
+
+.container {
+  display: table;
+  width: 100%;
+  height: 100%;
+  table-layout: fixed;
+}
+
+/* ══════════════════════════════════════
+   LEFT SIDEBAR (30%)
+   ══════════════════════════════════════ */
+.sidebar {
+  display: table-cell;
+  width: 68mm;
+  height: 297mm;
+  background-color: #0f172a; /* Slate 900 */
+  color: #f8fafc; /* Slate 50 */
+  padding: 20mm 5mm 15mm 6mm;
+  vertical-align: top;
+}
+
+.photo-container {
+  text-align: center;
+  margin-bottom: 6mm;
+}
+
+.profile-photo {
+  width: 32mm;
+  height: 32mm;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #38bdf8; /* Sky 400 accent */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-section {
+  margin-bottom: 7mm;
+}
+
+.sidebar-title {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #38bdf8; /* Sky 400 */
+  margin-bottom: 2px;
+}
+
+.sidebar-rule {
+  height: 1px;
+  background-color: rgba(56, 189, 248, 0.2);
+  margin-bottom: 4px;
+}
+
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5px;
+}
+
+.contact-item {
+  font-size: 8.5px;
+  line-height: 1.35;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.contact-item .label {
+  font-weight: 700;
+  color: #94a3b8;
+  display: block;
+  text-transform: uppercase;
+  font-size: 7.5px;
+  letter-spacing: 0.02em;
+}
+
+.contact-item .val {
+  color: #cbd5e1;
+}
+
+/* Skills styling */
+.skill-group {
+  margin-bottom: 4px;
+}
+
+.skill-cat {
+  font-weight: 700;
+  font-size: 8.5px;
+  color: #e2e8f0;
+  text-transform: uppercase;
+  margin-bottom: 1px;
+}
+
+.skill-vals {
+  font-size: 8.5px;
+  color: #94a3b8;
+}
+
+.skills-flat {
+  font-size: 8.5px;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+/* Sidebar entry styling (Education, Certs) */
+.sidebar-entry {
+  margin-bottom: 5px;
+}
+
+.sidebar-entry .entry-role {
+  font-weight: 700;
+  font-size: 8.5px;
+  color: #f1f5f9;
+  line-height: 1.2;
+}
+
+.sidebar-entry .entry-org {
+  font-size: 8px;
+  color: #94a3b8;
+  margin-top: 1px;
+}
+
+.sidebar-entry .entry-date {
+  font-size: 7.5px;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+/* ══════════════════════════════════════
+   MAIN CONTENT AREA (70%)
+   ══════════════════════════════════════ */
+.main-content {
+  display: table-cell;
+  width: 142mm;
+  height: 297mm;
+  padding: 20mm 10mm 15mm 10mm;
+  vertical-align: top;
+  background-color: #ffffff;
+}
+
+.main-header {
+  margin-bottom: 8mm;
+}
+
+.main-header .name {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+
+.main-header .title-headline {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0284c7; /* Sky 600 */
+  letter-spacing: 0.02em;
+}
+
+.main-section {
+  margin-bottom: 6mm;
+}
+
+.main-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.main-rule {
+  height: 1.5px;
+  background-color: #e2e8f0;
+  margin-bottom: 4mm;
+}
+
+.summary-body {
+  font-size: 10px;
+  color: #334155;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+/* Experience & Projects entry */
+.main-entry {
+  margin-bottom: 4.5mm;
+}
+
+.main-entry:last-child {
+  margin-bottom: 0;
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+
+.role-org {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.role-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.org-sep {
+  color: #cbd5e1;
+  font-weight: 300;
+  font-size: 9px;
+}
+
+.org-name {
+  font-size: 9.5px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.org-name.tech {
+  color: #0284c7;
+  font-weight: 600;
+  font-size: 8.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.entry-date {
+  font-size: 9px;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.bullets {
+  list-style-type: disc;
+  padding-left: 4.5mm;
+  margin-top: 2px;
+}
+
+.bullets li {
+  font-size: 9.5px;
+  color: #334155;
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+
+.bullets li:last-child {
+  margin-bottom: 0;
+}
+
+.entry-desc {
+  font-size: 9.5px;
+  color: #475569;
+  line-height: 1.4;
+  margin-top: 2px;
+}

@@ -1,34 +1,12 @@
 import { Outlet } from "react-router-dom";
-import { UserButton } from "@clerk/clerk-react";
-
 import Sidebar from "../components/layout/Sidebar";
 
 function ProtectedLayout() {
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-      }}
-    >
+    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
       <Sidebar />
-
-      <div style={{ flex: 1 }}>
-        <header
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            padding: "1rem",
-            borderBottom: "1px solid #ddd",
-          }}
-        >
-          <UserButton />
-        </header>
-
-        <main style={{ padding: "1.5rem" }}>
-          <Outlet />
-        </main>
+      <div className="flex-1 overflow-hidden">
+        <Outlet />
       </div>
     </div>
   );

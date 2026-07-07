@@ -1,12 +1,24 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getResume, updateResume,downloadResumePdf } from "@/api/resumeApi";
+import { useParams, Link } from "react-router-dom";
+import { getResume, updateResume, downloadResumePdf } from "@/api/resumeApi";
 import {
   generateSummary,
   rewriteExperience,
   matchJobDescription,
-  analyzeATS, // make sure this exists in your aiApi
+  analyzeATS,
 } from "@/api/aiApi";
+import { 
+  Eye, 
+  EyeOff, 
+  LayoutDashboard, 
+  Sparkles, 
+  HelpCircle, 
+  Save, 
+  Download, 
+  FileText, 
+  Check, 
+  RefreshCw 
+} from "lucide-react";
 
 // Core Form Section Component Imports
 import PersonalInfoSection from "../components/editor/PersonalInfoSection";
@@ -18,9 +30,11 @@ import CertificationsSection from "../components/editor/CertificationsSection";
 import SummarySection from "../components/editor/SummarySection";
 import TemplateSelector from "../components/editor/TemplateSelector";
 import ExportPreviewModal from "../components/editor/ExportPreviewModal";
+import RoleCategorySelector from "../components/editor/RoleCategorySelector";
 // Modal Imports
 import ATSAnalysisModal from "../components/editor/ATSAnalysisModal";
 import JDMatchModal from "../components/editor/JDMatchSection";
+import CoverLetterModal from "../components/editor/CoverLetterModal";
 
 // Decoupled Preview Engine System Import
 import ResumePreview from "../components/preview/ResumePreview";
@@ -39,6 +53,11 @@ function ResumeEditor() {
   // Modal state
   const [atsModalOpen, setAtsModalOpen] = useState(false);
   const [jdModalOpen, setJdModalOpen] = useState(false);
+  const [coverLetterOpen, setCoverLetterOpen] = useState(false);
+
+  // Panel layout & tabs state
+  const [previewExpanded, setPreviewExpanded] = useState(true);
+  const [activeTab, setActiveTab] = useState("personal");
 
   // ATS state
   const [atsData, setAtsData] = useState(null);
@@ -324,133 +343,239 @@ const handleTemplateChange =
 }
 
 
-  if (loading) return <div className="p-6 text-center text-gray-500 font-sans">Loading editor...</div>;
-  if (error) return <div className="p-6 text-center text-red-500 font-sans">{error}</div>;
-
-  return (
-    <>
-      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen bg-gray-100 print:block">
-        {/* LEFT PANEL */}
-        <div className="border-r border-gray-200 p-6 h-screen overflow-y-auto bg-white print:hidden">
-          {/* Top Bar */}
-          <div className="flex justify-between items-center mb-2">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">Resume Builder</h2>
-              <p className="text-xs text-gray-500 mt-0.5">Working on: {formData?.title}</p>
-            </div>
-            <div className="flex gap-2">
-              <button onClick={handleDownload}>
-    Download PDF
-</button>
-              <button
-                onClick={handleSave}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded shadow transition font-medium text-sm"
-              >
-                Save Progress
-              </button>
-            </div>
-          </div>
-
-          <p className="text-xs text-gray-400 mb-4">{saveStatus}</p>
-
-          {/* ── AI Analysis Buttons ── */}
-          <div className="flex gap-2 mb-6">
-            <button
-              onClick={handleOpenATS}
-              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 transition-colors shadow-sm"
-              disabled={!hasResumeContent()}
-title={
-  !hasResumeContent()
-    ? "Add resume content first"
-    : ""
-}
-            >
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" strokeWidth="1.3"/>
-                <path d="M6.5 3.5v3l2 1.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-              </svg>
-              Analyze Resume
-            </button>
-            <button
-              onClick={() => setJdModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 transition-colors shadow-sm"
-              disabled={!hasResumeContent()}
-title={
-  !hasResumeContent()
-    ? "Add resume content first"
-    : ""
-}
-            >
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <rect x="1.5" y="1.5" width="4" height="4" rx="0.8" stroke="currentColor" strokeWidth="1.3"/>
-                <rect x="7.5" y="1.5" width="4" height="4" rx="0.8" stroke="currentColor" strokeWidth="1.3"/>
-                <rect x="1.5" y="7.5" width="4" height="4" rx="0.8" stroke="currentColor" strokeWidth="1.3"/>
-                <path d="M7.5 9.5h4M9.5 7.5v4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-              </svg>
-              Test Against JD
-            </button>
-          </div>
-<TemplateSelector
-
-  selectedTemplate={
-    formData.template || "engineer"
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] h-screen space-y-3 font-sans">
+        <RefreshCw className="animate-spin w-8 h-8 text-indigo-600" />
+        <p className="text-slate-400 text-sm animate-pulse">Loading resume editor...</p>
+      </div>
+    );
   }
 
-  onSelect={handleTemplateChange}
+  if (error) {
+    return (
+      <div className="max-w-md mx-auto text-center py-12 px-6 glass-card border border-red-100 rounded-xl mt-12 space-y-4 font-sans">
+        <p className="text-sm font-semibold text-rose-600">{error}</p>
+        <Link to="/dashboard" className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg text-xs transition">
+          Back to Dashboard
+        </Link>
+      </div>
+    );
+  }
 
-/>
-          {/* Form Sections */}
+  const tabs = [
+    { id: "personal", label: "👤 Profile" },
+    { id: "work", label: "💼 Work" },
+    { id: "skills", label: "🎓 Skills" },
+    { id: "projects", label: "🚀 Projects" }
+  ];
+
+  return (
+    <div className="h-screen bg-white dark:bg-slate-950 flex flex-col font-sans select-none print:bg-white print:block overflow-hidden">
+      
+      {/* ── STICKY GLASSMORPHIC HEADER CONTROL BAR ── */}
+      <header className="z-40 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 px-4 py-2.5 flex items-center justify-between gap-4 shrink-0 print:hidden">
+        {/* Left Info */}
+        <div className="flex items-center gap-3">
+          <Link 
+            to="/dashboard"
+            className="p-2 rounded-lg text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
+            title="Back to Dashboard"
+          >
+            <LayoutDashboard className="w-4 h-4" />
+          </Link>
+          <div className="text-left">
+            <input 
+              type="text"
+              value={formData?.title || ""}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              className="text-base font-bold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded px-1.5 py-0.5 bg-transparent border-0 hover:bg-slate-100 dark:hover:bg-slate-800 transition truncate max-w-[150px] sm:max-w-[200px]"
+            />
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 flex items-center gap-1.5 pl-2 mt-0.5">
+              <span className={`inline-block w-1.5 h-1.5 rounded-full ${saveStatus === "Saving..." ? "bg-amber-500 animate-ping" : "bg-emerald-500"}`} />
+              {saveStatus}
+            </p>
+          </div>
+        </div>
+
+        {/* Center Template Selector */}
+        <div className="w-44">
+          <TemplateSelector
+            selectedTemplate={formData.template || "engineer"}
+            onSelect={handleTemplateChange}
+          />
+        </div>
+
+        {/* Right Actions */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* AI Scan Actions */}
+          <button
+            onClick={handleOpenATS}
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition shadow-xs disabled:opacity-50"
+            disabled={!hasResumeContent()}
+            title={!hasResumeContent() ? "Add resume content first" : "Run ATS Scan"}
+          >
+            <Sparkles className="text-indigo-500 w-3.5 h-3.5 animate-pulse" />
+            Analyze
+          </button>
+          
+          <button
+            onClick={() => setJdModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition shadow-xs disabled:opacity-50"
+            disabled={!hasResumeContent()}
+            title={!hasResumeContent() ? "Add resume content first" : "Test Match against Job Desc"}
+          >
+            <HelpCircle className="text-emerald-500 w-3.5 h-3.5" />
+            Job Match
+          </button>
+
+          <button
+            onClick={() => setCoverLetterOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition shadow-xs disabled:opacity-50"
+            disabled={!hasResumeContent()}
+            title={!hasResumeContent() ? "Add resume content first" : "Generate Cover Letter"}
+          >
+            <Sparkles className="text-violet-500 w-3.5 h-3.5" />
+            Cover Letter
+          </button>
+
+          {/* Toggle Live Preview */}
+          <button
+            onClick={() => setPreviewExpanded(!previewExpanded)}
+            className={`p-2 rounded-lg border transition shadow-xs ${previewExpanded ? "bg-indigo-50 text-indigo-600 border-indigo-200" : "bg-white text-slate-400 border-slate-200 hover:text-slate-600"}`}
+            title={previewExpanded ? "Collapse Live Preview" : "Expand Live Preview"}
+          >
+            {previewExpanded ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+          </button>
+
+          {/* Export PDF Modal trigger */}
+          <button
+            onClick={handleDownload}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3.5 rounded-lg text-xs transition shadow-md hover:shadow-lg flex items-center gap-1.5"
+          >
+            <Download className="w-3.5 h-3.5" />
+            Download
+          </button>
+        </div>
+      </header>
+
+      {/* ── MAIN WORKSPACE PANELS ── */}
+      <div className={`grid grid-cols-1 ${previewExpanded ? "lg:grid-cols-12" : "lg:grid-cols-1"} flex-1 overflow-hidden print:block`}>
+        
+        {/* LEFT PANEL: EDITOR FORMS */}
+        <div className={`p-5 border-r border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-y-auto h-full print:hidden ${previewExpanded ? "lg:col-span-6 xl:col-span-5" : "lg:col-span-1 max-w-4xl mx-auto w-full"}`}>
+          
+          {/* Tabs switch navigation */}
+          <div className="flex border-b border-slate-200 dark:border-slate-800 pb-px mb-6 overflow-x-auto gap-2">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2 border-b-2 font-bold text-xs transition whitespace-nowrap ${
+                  activeTab === tab.id
+                    ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
+                    : "border-transparent text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
           <div className="space-y-6 pb-12">
-            <PersonalInfoSection
-              formData={formData}
-              setFormData={setFormData}
-              updatePersonalInfo={updatePersonalInfo}
-            />
-            <SkillsSection formData={formData} addSkill={addSkill} removeSkill={removeSkill} />
-            <ExperienceSection
-              formData={formData}
-              addExperience={addExperience}
-              updateExperience={updateExperience}
-              removeExperience={removeExperience}
-              handleRewriteExperience={handleRewriteExperience}
-              aiLoadingIndex={aiLoadingIndex}
-            />
-            <EducationSection
-              formData={formData}
-              addEducation={addEducation}
-              updateEducation={updateEducation}
-              removeEducation={removeEducation}
-            />
-            <ProjectsSection
-              formData={formData}
-              addProject={addProject}
-              updateProject={updateProject}
-              removeProject={removeProject}
-            />
-            <CertificationsSection
-              formData={formData}
-              addCertification={addCertification}
-              updateCertification={updateCertification}
-              removeCertification={removeCertification}
-            />
-            <SummarySection
-              summary={formData.summary || ""}
-              loading={summaryLoading}
-              onGenerate={handleGenerateSummary}
-              onChange={(value) => setFormData((prev) => ({ ...prev, summary: value }))}
-            />
+            {/* TAB 1: PROFILE */}
+            {activeTab === "personal" && (
+              <>
+                <RoleCategorySelector
+                  selectedCategory={formData?.roleCategory || "software_engineering"}
+                  onChange={(category) => setFormData({ ...formData, roleCategory: category })}
+                />
+                <PersonalInfoSection
+                  formData={formData}
+                  setFormData={setFormData}
+                  updatePersonalInfo={updatePersonalInfo}
+                />
+              </>
+            )}
+
+            {/* TAB 2: WORK EXPERIENCE & SUMMARY */}
+            {activeTab === "work" && (
+              <>
+                <SummarySection
+                  summary={formData.summary || ""}
+                  loading={summaryLoading}
+                  onGenerate={handleGenerateSummary}
+                  onChange={(value) => setFormData((prev) => ({ ...prev, summary: value }))}
+                />
+                <ExperienceSection
+                  formData={formData}
+                  addExperience={addExperience}
+                  updateExperience={updateExperience}
+                  removeExperience={removeExperience}
+                  handleRewriteExperience={handleRewriteExperience}
+                  aiLoadingIndex={aiLoadingIndex}
+                  title={
+                    formData?.roleCategory === "medical"
+                      ? "Clinical Experience"
+                      : formData?.roleCategory === "education"
+                      ? "Teaching Experience"
+                      : "Experience"
+                  }
+                />
+              </>
+            )}
+
+            {/* TAB 3: SKILLS & EDUCATION */}
+            {activeTab === "skills" && (
+              <>
+                <SkillsSection formData={formData} addSkill={addSkill} removeSkill={removeSkill} />
+                <EducationSection
+                  formData={formData}
+                  addEducation={addEducation}
+                  updateEducation={updateEducation}
+                  removeEducation={removeEducation}
+                />
+              </>
+            )}
+
+            {/* TAB 4: PROJECTS & CERTIFICATIONS */}
+            {activeTab === "projects" && (
+              <>
+                {(formData?.roleCategory === "software_engineering" ||
+                  formData?.roleCategory === "design" ||
+                  formData?.roleCategory === "general" ||
+                  !formData?.roleCategory) && (
+                  <ProjectsSection
+                    formData={formData}
+                    addProject={addProject}
+                    updateProject={updateProject}
+                    removeProject={removeProject}
+                    title={formData?.roleCategory === "design" ? "Portfolio & Design Projects" : "Projects"}
+                  />
+                )}
+                <CertificationsSection
+                  formData={formData}
+                  addCertification={addCertification}
+                  updateCertification={updateCertification}
+                  removeCertification={removeCertification}
+                  title={formData?.roleCategory === "medical" ? "Licenses & Certifications" : "Certifications"}
+                />
+              </>
+            )}
           </div>
         </div>
 
-        {/* RIGHT PANEL */}
-        <div className="p-4 sm:p-8 overflow-y-auto h-screen bg-gray-100 flex items-start justify-center print:bg-white print:p-0 print:h-auto">
-          <div className="w-full max-w-2xl">
-            <ResumePreview formData={formData} resume={resume} />
+        {/* RIGHT PANEL: LIVE PREVIEW CONTAINER */}
+        {previewExpanded && (
+          <div className="lg:col-span-6 xl:col-span-7 p-4 sm:p-8 overflow-y-auto h-full bg-slate-50 dark:bg-slate-900/40 flex items-start justify-center print:bg-white print:p-0 print:h-auto">
+            <div className="w-full max-w-2xl bg-white shadow-lg border dark:border-slate-800 rounded-lg p-2 print:shadow-none print:border-0">
+              <ResumePreview formData={formData} resume={resume} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Modals */}
+      {/* MODALS SECTION */}
       <ATSAnalysisModal
         isOpen={atsModalOpen}
         onClose={() => setAtsModalOpen(false)}
@@ -468,19 +593,19 @@ title={
         jdAnalysis={jdAnalysis}
       />
       <ExportPreviewModal
-
-  isOpen={isPreviewOpen}
-
-  onClose={() =>
-    setIsPreviewOpen(false)
-  }
-
-  resumeId={id}
-
-  onDownload={handleFinalDownload}
-
-/>
-    </>
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        resumeId={id}
+        onDownload={handleFinalDownload}
+      />
+      <CoverLetterModal
+        isOpen={coverLetterOpen}
+        onClose={() => setCoverLetterOpen(false)}
+        formData={formData}
+        jobDescription={jobDescription}
+        setJobDescription={setJobDescription}
+      />
+    </div>
   );
 }
 

@@ -37,6 +37,9 @@ def normalize_personal_info(data):
 
         "portfolio":
             data.get("portfolio", ""),
+
+        "passportPhoto":
+            data.get("passportPhoto", ""),
     }
 
 
@@ -80,6 +83,9 @@ def build_template_context(resume_data):
     resume_data = resume_data or {}
 
     return {
+
+        "roleCategory":
+            resume_data.get("roleCategory", "software_engineering"),
 
         "personalInfo":
             normalize_personal_info(

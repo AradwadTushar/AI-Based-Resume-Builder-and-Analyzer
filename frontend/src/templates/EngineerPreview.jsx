@@ -138,7 +138,11 @@ export function BasicTemplate({ formData = defaultData }) {
       {experience && experience.length > 0 && (
         <section className="mt-[12pt]">
           <h2 className="font-sans text-[10pt] font-bold text-[#0f5132] uppercase tracking-[0.10em] pb-[3pt] border-b border-[#d1d5db] mb-[7pt]">
-            Experience
+            {formData.roleCategory === "medical"
+              ? "Clinical Experience"
+              : formData.roleCategory === "education"
+              ? "Teaching Experience"
+              : "Experience"}
           </h2>
 
           {experience.map((job, idx) => (
@@ -175,10 +179,10 @@ export function BasicTemplate({ formData = defaultData }) {
       )}
 
       {/* ── PROJECTS ── */}
-      {projects && projects.length > 0 && (
+      {projects && projects.length > 0 && (formData.roleCategory === "software_engineering" || formData.roleCategory === "design" || formData.roleCategory === "general" || !formData.roleCategory) && (
         <section className="mt-[12pt]">
           <h2 className="font-sans text-[10pt] font-bold text-[#0f5132] uppercase tracking-[0.10em] pb-[3pt] border-b border-[#d1d5db] mb-[7pt]">
-            Projects
+            {formData.roleCategory === "design" ? "Portfolio" : "Projects"}
           </h2>
 
           {projects.map((project, idx) => (
@@ -259,7 +263,7 @@ export function BasicTemplate({ formData = defaultData }) {
       {certifications && certifications.length > 0 && (
         <section className="mt-[12pt]">
           <h2 className="font-sans text-[10pt] font-bold text-[#0f5132] uppercase tracking-[0.10em] pb-[3pt] border-b border-[#d1d5db] mb-[7pt]">
-            Certifications
+            {formData.roleCategory === "medical" ? "Licenses & Certifications" : "Certifications"}
           </h2>
 
           {certifications.map((cert, idx) => (

@@ -1,7 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ResumeCard from "../components/resume/ResumeCard";
 import EmptyState from "../components/resume/EmptyState";
+import FeatureTour from "../components/layout/FeatureTour";
+import { Plus, Sparkles, RefreshCw } from "lucide-react";
+import PremiumLoader from "../components/ui/PremiumLoader";
 import {
   getResumes,
   createResume,
@@ -14,13 +16,8 @@ function Dashboard() {
   const [error, setError] = useState(null);
 
   const handleCreateResume = async () => {
-    console.log("CREATE CLICKED");
-
     try {
       const response = await createResume("Untitled Resume");
-
-      console.log("CREATE RESPONSE:", response);
-
       await fetchResumes();
     } catch (err) {
       console.error("CREATE ERROR:", err);
@@ -30,7 +27,7 @@ function Dashboard() {
   const fetchResumes = async () => {
     try {
       setLoading(true);
-      setError(null); // Clear previous errors if retrying
+      setError(null);
       const data = await getResumes();
       setResumes(data);
     } catch (err) {
@@ -43,13 +40,11 @@ function Dashboard() {
 
   const handleDeleteResume = async (resumeId) => {
     const confirmed = window.confirm("Delete this resume?");
-
     if (!confirmed) return;
 
     try {
       await deleteResume(resumeId);
-
-      fetchResumes();
+      await fetchResumes();
     } catch (err) {
       console.error(err);
     }
@@ -59,48 +54,56 @@ function Dashboard() {
     fetchResumes();
   }, []);
 
-  // 2. FIXED: Log 'resumes' state instead of the local 'data' variable
-  console.log("Current Resumes:", resumes);
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[200px]">
-        <p className="text-muted-foreground animate-pulse">
-          Loading resumes...
-        </p>
+      <div className="flex flex-col items-center justify-center min-h-[400px]">
+        <PremiumLoader text="Loading your resumes..." />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center p-4 text-destructive">
-        <p>{error}</p>
-        <Button onClick={fetchResumes} variant="outline" className="mt-2">
+      <div className="max-w-md mx-auto text-center py-12 px-6 glass-card border border-red-100 rounded-xl mt-12 space-y-4 font-sans select-none">
+        <p className="text-sm font-semibold text-rose-600">{error}</p>
+        <button 
+          onClick={fetchResumes} 
+          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg text-xs transition shadow-sm"
+        >
           Try Again
-        </Button>
+        </button>
       </div>
     );
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-4xl font-bold">My Resumes</h1>
-          <p className="text-muted-foreground mt-1">
-            Manage and create AI-powered resumes
+    <div className="max-w-6xl mx-auto py-6 px-4 font-sans select-none space-y-8">
+      {/* HEADER SECTION */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200/60 dark:border-slate-800/80 pb-6">
+        <div className="space-y-1">
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            <Sparkles className="text-indigo-600 w-7 h-7" />
+            My Resumes
+          </h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
+            Create, edit, and optimize your profession-aware resumes.
           </p>
         </div>
 
-        <Button onClick={handleCreateResume}>Create Resume</Button>
+        <button 
+          onClick={handleCreateResume}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition shadow-md hover:shadow-lg flex items-center gap-1.5"
+        >
+          <Plus className="w-4 h-4" />
+          Create Resume
+        </button>
       </div>
 
-      {/* --- CONDITIONAL RENDER START --- */}
+      {/* RESUMES LIST / EMPTY STATE */}
       {resumes.length === 0 ? (
-        <EmptyState />
+        <EmptyState onCreate={handleCreateResume} />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {resumes.map((resume) => (
             <ResumeCard
               key={resume.id}
@@ -112,7 +115,9 @@ function Dashboard() {
           ))}
         </div>
       )}
-      {/* --- CONDITIONAL RENDER END --- */}
+
+      {/* FIRST-TIME USER ONBOARDING TOUR */}
+      <FeatureTour />
     </div>
   );
 }

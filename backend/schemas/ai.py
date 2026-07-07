@@ -43,3 +43,12 @@ class JDMatchResponse(BaseModel):
     matched_keywords: list[str]
     missing_keywords: list[str]
     recommendations: list[str]
+
+
+class CoverLetterRequest(BaseModel):
+    resume_data: dict
+    job_description: str
+
+
+class CoverLetterResponse(BaseModel):
+    cover_letter: str

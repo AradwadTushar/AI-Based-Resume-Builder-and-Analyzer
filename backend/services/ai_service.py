@@ -217,3 +217,105 @@ Rules:
     )
 
     return json.loads(cleaned)
+
+
+async def analyze_raw_resume(resume_text: str, job_description: str | None = None) -> dict:
+    """Analyzes raw resume text, optionally against a job description, and returns structured feedback."""
+    if job_description:
+        prompt = f"""
+You are an expert ATS optimization assistant.
+Analyze the following resume text against the target job description.
+
+Resume Text:
+{resume_text}
+
+Job Description:
+{job_description}
+
+Rules:
+- Score must represent how well the resume matches the job description (0 to 100).
+- missing_keywords must include keywords and skills mentioned in the job description that are absent or weak in the resume.
+- weak_sections should specify which parts of the resume fail to align with the job description.
+- suggestions must provide specific guidance on how to customize the resume for this position.
+- rewrites must provide 1-3 specific before-and-after improvements adapting the resume's text to match the JD's requirements.
+- Return ONLY valid JSON matching the format below. Do not include markdown fences or any explanation outside the JSON.
+
+Required JSON format:
+{{
+  "score": integer,
+  "missing_keywords": ["keyword"],
+  "weak_sections": ["weakness description"],
+  "suggestions": ["suggestion"],
+  "rewrites": [
+    {{
+      "original": "original text to improve",
+      "improved": "improved text tailored to the JD"
+    }}
+  ]
+}}
+"""
+    else:
+        prompt = f"""
+You are an expert ATS resume analyzer.
+Analyze the following resume text.
+
+Resume Text:
+{resume_text}
+
+Rules:
+- Score the resume's overall quality and ATS readiness (0 to 100).
+- missing_keywords must list standard professional keywords/skills that are expected for the candidate's career level but missing.
+- weak_sections should describe specific parts of the resume that lack detail, metrics, or proper formatting.
+- suggestions must provide clear, actionable steps to improve the resume.
+- rewrites must provide 1-3 before-and-after examples improving generic lines in the resume text into strong, metrics-driven bullets.
+- Return ONLY valid JSON matching the format below. Do not include markdown fences or any explanation outside the JSON.
+
+Required JSON format:
+{{
+  "score": integer,
+  "missing_keywords": ["keyword"],
+  "weak_sections": ["weakness description"],
+  "suggestions": ["suggestion"],
+  "rewrites": [
+    {{
+      "original": "original text to improve",
+      "improved": "improved text with metrics/achievements"
+    }}
+  ]
+}}
+"""
+
+    response = model.generate_content(prompt)
+    cleaned = _clean_json_response(response.text)
+    return json.loads(cleaned)
+
+
+async def generate_cover_letter_service(data: dict) -> str:
+    resume_data = data.get("resume_data", {})
+    job_description = data.get("job_description", "")
+
+    prompt = f"""
+You are a professional career coach and expert resume/cover letter writer.
+Write a highly compelling, tailored, and modern Cover Letter based on the applicant's resume details and the target Job Description.
+
+Resume Details:
+{json.dumps(resume_data, indent=2)}
+
+Job Description:
+{job_description}
+
+Rules:
+1. Make it professional, polite, and persuasive.
+2. Align the candidate's achievements directly to the job description key requirements.
+3. Structure it correctly:
+   - Date / Professional Header (with placeholders or using contact details from resume if present)
+   - Salutation (Dear Hiring Manager, or specific name if inferable)
+   - Introduction (capturing interest and stating role)
+   - Body Paragraphs (highlighting specific skills and outcomes)
+   - Closing (expressing enthusiasm and call-to-action)
+   - Sign-off (Sincerely, candidate's name)
+4. Do not make up facts not supported by the resume data, but present existing details in the best possible light.
+5. Return ONLY the plain text of the cover letter. Do not include any HTML tags, conversational introductions, or markdown fences.
+"""
+    response = model.generate_content(prompt)
+    return response.text.strip()

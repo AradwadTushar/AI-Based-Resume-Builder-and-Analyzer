@@ -1,61 +1,72 @@
 import React from "react";
+import { Plus, Trash2 } from "lucide-react";
 
-function CertificationsSection({ formData, addCertification, updateCertification, removeCertification }) {
+function CertificationsSection({ formData, addCertification, updateCertification, removeCertification, title = "Certifications" }) {
   return (
-    <div className="space-y-4 mt-6 pt-6 border-t">
-      <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-xl">Certifications</h3>
-        <button
-          onClick={addCertification}
-          className="border px-4 py-1 rounded bg-gray-50 hover:bg-gray-100 transition text-sm"
-        >
-          Add Certification
+    <div className="space-y-4 mt-6 pt-6 border-t border-slate-100">
+      <div className="ef-section-header" style={{ borderBottom: "none", marginBottom: 0, paddingBottom: 0 }}>
+        <span className="ef-section-title">{title}</span>
+        <button onClick={addCertification} className="ef-add-btn" type="button">
+          <Plus className="w-3.5 h-3.5" />
+          Add Entry
         </button>
       </div>
 
-      {(formData?.certifications || []).map((cert, index) => (
-        <div key={index} className="border rounded p-4 space-y-2 bg-white relative shadow-sm">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-              Certification #{index + 1}
-            </span>
-            <button
-              onClick={() => removeCertification(index)}
-              className="text-red-500 hover:text-red-700 text-sm font-medium"
-            >
-              Remove
-            </button>
+      <div className="space-y-3">
+        {(formData?.certifications || []).map((cert, index) => (
+          <div key={index} className="ef-section-card">
+            <div className="flex justify-between items-center mb-3">
+              <span className="ef-entry-label">Certification #{index + 1}</span>
+              <button type="button" onClick={() => removeCertification(index)} className="ef-remove-btn" title="Remove">
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <div className="space-y-2.5">
+              <div>
+                <label className="ef-label">Certification Name</label>
+                <input
+                  value={cert.name || ""}
+                  onChange={(e) => updateCertification(index, "name", e.target.value)}
+                  placeholder="e.g. AWS Solutions Architect"
+                  className="ef-input"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label className="ef-label">Issuing Organization</label>
+                  <input
+                    value={cert.issuer || ""}
+                    onChange={(e) => updateCertification(index, "issuer", e.target.value)}
+                    placeholder="e.g. Amazon Web Services"
+                    className="ef-input"
+                  />
+                </div>
+                <div>
+                  <label className="ef-label">Issue Date</label>
+                  <input
+                    value={cert.issueDate || ""}
+                    onChange={(e) => updateCertification(index, "issueDate", e.target.value)}
+                    placeholder="e.g. January 2025"
+                    className="ef-input"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="ef-label">Credential URL</label>
+                <input
+                  value={cert.credentialUrl || ""}
+                  onChange={(e) => updateCertification(index, "credentialUrl", e.target.value)}
+                  placeholder="https://credentials.example.com/..."
+                  className="ef-input"
+                />
+              </div>
+            </div>
           </div>
-
-          <input
-            value={cert.name || ""}
-            onChange={(e) => updateCertification(index, "name", e.target.value)}
-            placeholder="Certification Name"
-            className="border p-2 rounded w-full text-sm"
-          />
-
-          <input
-            value={cert.issuer || ""}
-            onChange={(e) => updateCertification(index, "issuer", e.target.value)}
-            placeholder="Issuing Organization"
-            className="border p-2 rounded w-full text-sm"
-          />
-
-          <input
-            value={cert.issueDate || ""}
-            onChange={(e) => updateCertification(index, "issueDate", e.target.value)}
-            placeholder="Issue Date (e.g., January 2025)"
-            className="border p-2 rounded w-full text-sm"
-          />
-
-          <input
-            value={cert.credentialUrl || ""}
-            onChange={(e) => updateCertification(index, "credentialUrl", e.target.value)}
-            placeholder="Credential URL"
-            className="border p-2 rounded w-full text-sm"
-          />
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

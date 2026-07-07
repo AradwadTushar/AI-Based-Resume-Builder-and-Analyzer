@@ -3,6 +3,7 @@ from routers.resume import router as resume_router
 from routers.auth import router as auth_router
 from fastapi.middleware.cors import CORSMiddleware
 from routers.ai import router as ai_router
+from routers.analyze import router as analyze_router
 from routers import export
 from fastapi.staticfiles import StaticFiles
 
@@ -32,6 +33,8 @@ app.include_router(resume_router)
 app.include_router(ai_router)
 
 app.include_router(export.router)
+
+app.include_router(analyze_router)
 
 @app.get("/")
 async def root():

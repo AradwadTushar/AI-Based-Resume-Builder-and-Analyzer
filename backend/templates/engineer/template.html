@@ -89,7 +89,11 @@
   ══════════════════════════════════════ -->
   {% if experience and experience | length > 0 %}
   <section class="section">
-    <h2 class="section-title">Professional Experience</h2>
+    <h2 class="section-title">
+      {% if roleCategory == 'medical' %}Clinical Experience
+      {% elif roleCategory == 'education' %}Teaching Experience
+      {% else %}Professional Experience{% endif %}
+    </h2>
     <div class="section-rule"></div>
 
     {% for job in experience %}
@@ -126,9 +130,12 @@
   <!-- ══════════════════════════════════════
        PROJECTS
   ══════════════════════════════════════ -->
-  {% if projects and projects | length > 0 %}
+  {% if projects and projects | length > 0 and (roleCategory == 'software_engineering' or roleCategory == 'design' or roleCategory == 'general') %}
   <section class="section">
-    <h2 class="section-title">Projects</h2>
+    <h2 class="section-title">
+      {% if roleCategory == 'design' %}Portfolio
+      {% else %}Projects{% endif %}
+    </h2>
     <div class="section-rule"></div>
 
     {% for project in projects %}
@@ -209,7 +216,10 @@
   ══════════════════════════════════════ -->
   {% if certifications and certifications | length > 0 %}
   <section class="section">
-    <h2 class="section-title">Certifications</h2>
+    <h2 class="section-title">
+      {% if roleCategory == 'medical' %}Licenses & Certifications
+      {% else %}Certifications{% endif %}
+    </h2>
     <div class="section-rule"></div>
 
     {% for cert in certifications %}

@@ -9,9 +9,17 @@ from schemas.ai import (
     JDMatchResponse,
     SummaryGenerateRequest,
     SummaryGenerateResponse,
+    CoverLetterRequest,
+    CoverLetterResponse,
 )
 
-from services.ai_service import analyze_resume, generate_summary, match_job_description, rewrite_experience
+from services.ai_service import (
+    analyze_resume,
+    generate_summary,
+    match_job_description,
+    rewrite_experience,
+    generate_cover_letter_service,
+)
 
 router = APIRouter(
     prefix="/api/ai",
@@ -73,3 +81,19 @@ async def match_jd_route(
     )
 
     return JDMatchResponse(**result)
+
+
+@router.post(
+    "/cover-letter",
+    response_model=CoverLetterResponse,
+)
+async def generate_cover_letter_route(
+    payload: CoverLetterRequest,
+):
+    cover_letter = await generate_cover_letter_service(
+        payload.model_dump()
+    )
+
+    return CoverLetterResponse(
+        cover_letter=cover_letter
+    )

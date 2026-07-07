@@ -31,5 +31,16 @@ export const RESUME_TEMPLATES = [
             "Visually expressive modern layout",
 
         atsScore: 78,
+    },
+
+    {
+        id: "photo_professional",
+
+        name: "Photo Professional",
+
+        description:
+            "Modern two-column template with profile picture",
+
+        atsScore: 94,
     }
 ]

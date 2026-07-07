@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { Plus } from "lucide-react";
 
 function SkillsSection({ formData, addSkill, removeSkill }) {
   const [skillInput, setSkillInput] = useState("");
 
   const handleAddClick = () => {
     if (!skillInput.trim()) return;
-    addSkill(skillInput);
+    addSkill(skillInput.trim());
     setSkillInput("");
   };
 
@@ -17,37 +18,40 @@ function SkillsSection({ formData, addSkill, removeSkill }) {
   };
 
   return (
-    <div className="space-y-2 mt-6 pt-6 border-t">
-      <h3 className="font-semibold text-lg">Skills</h3>
+    <div className="space-y-3.5 mt-6 pt-6 border-t border-slate-100">
+      <div className="ef-section-header" style={{ borderBottom: "none", marginBottom: 0, paddingBottom: 0 }}>
+        <span className="ef-section-title">Skills</span>
+      </div>
 
       <div className="flex gap-2">
         <input
           value={skillInput}
           onChange={(e) => setSkillInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Add skill"
-          className="border p-2 rounded w-full"
+          placeholder="Type a skill and press Enter…"
+          className="ef-input flex-1"
         />
-
-        <button 
-          onClick={handleAddClick} 
-          className="border px-4 rounded bg-gray-50 hover:bg-gray-100 transition"
+        <button
+          onClick={handleAddClick}
+          className="ef-add-btn shrink-0"
+          type="button"
         >
+          <Plus className="w-3.5 h-3.5" />
           Add
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-2 mt-2">
+      <div className="flex flex-wrap gap-2 mt-1 min-h-[28px]">
+        {(formData?.skills || []).length === 0 && (
+          <p className="text-xs text-slate-400 italic">No skills added yet.</p>
+        )}
         {(formData?.skills || []).map((skill, index) => (
-          <div
-            key={index}
-            className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2 text-sm"
-          >
+          <div key={index} className="ef-skill-chip">
             <span>{skill}</span>
-            <button 
+            <button
               onClick={() => removeSkill(index)}
-              className="hover:text-red-500 font-bold"
               aria-label={`Remove ${skill}`}
+              title="Remove"
             >
               ×
             </button>

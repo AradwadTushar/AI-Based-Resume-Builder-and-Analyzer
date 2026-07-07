@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ personalInfo.fullName }} — Resume</title>
+  <link rel="stylesheet" href="/templates/{{ template_name }}/style.css" />
+</head>
+<body>
+<div class="page">
+  <div class="container">
+    
+    <!-- ══════════════════════════════════════
+         LEFT SIDEBAR (30% width)
+    ══════════════════════════════════════ -->
+    <aside class="sidebar">
+      <!-- Photo Container -->
+      {% if personalInfo.passportPhoto %}
+      <div class="photo-container">
+        <img src="{{ personalInfo.passportPhoto }}" alt="Profile Photo" class="profile-photo" />
+      </div>
+      {% endif %}
+
+      <!-- Contact Info -->
+      <section class="sidebar-section contact-info">
+        <h3 class="sidebar-title">Contact</h3>
+        <div class="sidebar-rule"></div>
+        <div class="contact-list">
+          {% if personalInfo.email %}
+            <div class="contact-item">
+              <span class="label">Email:</span>
+              <span class="val">{{ personalInfo.email }}</span>
+            </div>
+          {% endif %}
+          {% if personalInfo.phone %}
+            <div class="contact-item">
+              <span class="label">Phone:</span>
+              <span class="val">{{ personalInfo.phone }}</span>
+            </div>
+          {% endif %}
+          {% if personalInfo.location %}
+            <div class="contact-item">
+              <span class="label">Location:</span>
+              <span class="val">{{ personalInfo.location }}</span>
+            </div>
+          {% endif %}
+          {% if personalInfo.linkedin %}
+            <div class="contact-item">
+              <span class="label">LinkedIn:</span>
+              <span class="val">{{ personalInfo.linkedin }}</span>
+            </div>
+          {% endif %}
+          {% if personalInfo.github %}
+            <div class="contact-item">
+              <span class="label">GitHub:</span>
+              <span class="val">{{ personalInfo.github }}</span>
+            </div>
+          {% endif %}
+          {% if personalInfo.portfolio %}
+            <div class="contact-item">
+              <span class="label">Portfolio:</span>
+              <span class="val">{{ personalInfo.portfolio }}</span>
+            </div>
+          {% endif %}
+        </div>
+      </section>
+
+      <!-- Skills -->
+      {% if skills and skills | length > 0 %}
+      <section class="sidebar-section">
+        <h3 class="sidebar-title">Skills</h3>
+        <div class="sidebar-rule"></div>
+        {% if skills[0] is mapping %}
+          <div class="skills-grouped">
+            {% for group in skills %}
+            <div class="skill-group">
+              <div class="skill-cat">{{ group.category }}</div>
+              <div class="skill-vals">{{ group.items | join(", ") }}</div>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="skills-flat">{{ skills | join(", ") }}</p>
+        {% endif %}
+      </section>
+      {% endif %}
+
+      <!-- Education -->
+      {% if education and education | length > 0 %}
+      <section class="sidebar-section">
+        <h3 class="sidebar-title">Education</h3>
+        <div class="sidebar-rule"></div>
+        {% for edu in education %}
+        <div class="sidebar-entry">
+          <div class="entry-role">{{ edu.degree }}</div>
+          <div class="entry-org">{{ edu.institution }}</div>
+          <div class="entry-date">{{ edu.endDate }}</div>
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <!-- Certifications -->
+      {% if certifications and certifications | length > 0 %}
+      <section class="sidebar-section">
+        <h3 class="sidebar-title">Certifications</h3>
+        <div class="sidebar-rule"></div>
+        {% for cert in certifications %}
+        <div class="sidebar-entry">
+          <div class="entry-role">{{ cert.name }}</div>
+          {% if cert.issuer %}
+            <div class="entry-org">{{ cert.issuer }}</div>
+          {% endif %}
+          <div class="entry-date">{{ cert.date }}</div>
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+    </aside>
+
+    <!-- ══════════════════════════════════════
+         MAIN CONTENT AREA (70% width)
+    ══════════════════════════════════════ -->
+    <main class="main-content">
+      <!-- Main Header -->
+      <header class="main-header">
+        <h1 class="name">{{ personalInfo.fullName }}</h1>
+        {% if personalInfo.title %}
+          <p class="title-headline">{{ personalInfo.title }}</p>
+        {% endif %}
+      </header>
+
+      <!-- Summary -->
+      {% if summary %}
+      <section class="main-section">
+        <h2 class="main-title">Professional Summary</h2>
+        <div class="main-rule"></div>
+        <p class="summary-body">{{ summary }}</p>
+      </section>
+      {% endif %}
+
+      <!-- Experience -->
+      {% if experience and experience | length > 0 %}
+      <section class="main-section">
+        <h2 class="main-title">
+          {% if roleCategory == 'medical' %}Clinical Experience
+          {% elif roleCategory == 'education' %}Teaching Experience
+          {% else %}Experience{% endif %}
+        </h2>
+        <div class="main-rule"></div>
+
+        {% for job in experience %}
+        <div class="main-entry">
+          <div class="entry-header">
+            <div class="role-org">
+              <span class="role-title">{{ job.title }}</span>
+              <span class="org-sep">|</span>
+              <span class="org-name">{{ job.company }}{% if job.location %}, {{ job.location }}{% endif %}</span>
+            </div>
+            <span class="entry-date">{{ job.startDate }} – {{ job.endDate if job.endDate else "Present" }}</span>
+          </div>
+
+          {% if job.bullets and job.bullets | length > 0 %}
+            <ul class="bullets">
+              {% for bullet in job.bullets %}
+              <li>{{ bullet }}</li>
+              {% endfor %}
+            </ul>
+          {% elif job.description %}
+            <p class="entry-desc">{{ job.description }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <!-- Projects -->
+      {% if projects and projects | length > 0 and (roleCategory == 'software_engineering' or roleCategory == 'design' or roleCategory == 'general') %}
+      <section class="main-section">
+        <h2 class="main-title">
+          {% if roleCategory == 'design' %}Portfolio
+          {% else %}Projects{% endif %}
+        </h2>
+        <div class="main-rule"></div>
+
+        {% for project in projects %}
+        <div class="main-entry">
+          <div class="entry-header">
+            <div class="role-org">
+              <span class="role-title">{{ project.name }}</span>
+              {% if project.techStack %}
+                <span class="org-sep">|</span>
+                <span class="org-name tech">{{ project.techStack }}</span>
+              {% endif %}
+            </div>
+            {% if project.date %}
+              <span class="entry-date">{{ project.date }}</span>
+            {% endif %}
+          </div>
+
+          {% if project.bullets and project.bullets | length > 0 %}
+            <ul class="bullets">
+              {% for bullet in project.bullets %}
+              <li>{{ bullet }}</li>
+              {% endfor %}
+            </ul>
+          {% elif project.description %}
+            <p class="entry-desc">{{ project.description }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+    </main>
+
+  </div><!-- /.container -->
+</div><!-- /.page -->
+</body>
+</html>
