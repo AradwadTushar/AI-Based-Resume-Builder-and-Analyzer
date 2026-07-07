@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="frontend/src/assets/ResumeIQ Logo Colored.png" alt="ResumeIQ AI Logo" width="120"/>
+<img src="frontend/src/assets/full_logo.png" alt="ResumeIQ AI Logo" width="120"/>
 
 # ResumeIQ AI
 
