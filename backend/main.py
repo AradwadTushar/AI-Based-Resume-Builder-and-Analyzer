@@ -39,3 +39,7 @@ app.include_router(analyze_router)
 @app.get("/")
 async def root():
     return {"message": "AI Resume Builder API running"}
+
+@app.get("/healthz")
+async def healthz():
+    return {"status": "ok"}
