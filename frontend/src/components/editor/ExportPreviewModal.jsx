@@ -1,4 +1,5 @@
 import React from "react";
+import axiosClient from "../../api/axiosClient";
 
 
 function ExportPreviewModal({
@@ -9,7 +10,6 @@ function ExportPreviewModal({
   onDownload
 
 }) {
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/+$/, "");
   const [
 
     iframeLoading,
@@ -18,15 +18,32 @@ const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/+$/, "
 
   ] = React.useState(true);
 
+  const [htmlContent, setHtmlContent] = React.useState("");
+
 
   React.useEffect(() => {
 
     if (isOpen) {
 
       setIframeLoading(true);
+      axiosClient.get(`/api/resumes/${resumeId}/preview`)
+        .then((res) => {
+          setHtmlContent(res.data);
+          setIframeLoading(false);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch resume preview:", err);
+          setHtmlContent(`
+            <div style="font-family: sans-serif; text-align: center; padding: 3rem; color: #ef4444;">
+              <h3>Failed to load preview</h3>
+              <p>${err.response?.data?.detail || err.message}</p>
+            </div>
+          `);
+          setIframeLoading(false);
+        });
     }
 
-  }, [isOpen]);
+  }, [isOpen, resumeId]);
 
 
   if (!isOpen) return null;
@@ -127,11 +144,10 @@ const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/+$/, "
 
 
   <iframe
-  title="Resume Preview"
-  src={`${API_BASE_URL}/api/resumes/${resumeId}/preview`}
-  className="w-full h-full border-0"
-  onLoad={() => setIframeLoading(false)}
-/>
+    title="Resume Preview"
+    srcDoc={htmlContent}
+    className="w-full h-full border-0"
+  />
 
 </div>
 
