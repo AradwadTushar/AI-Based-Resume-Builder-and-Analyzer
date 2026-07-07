@@ -10,32 +10,57 @@ def parse_description_to_bullets(description):
     """
     Parses a single description string containing bullet characters (•, ■, ▪, *, -)
     or newlines into a list of separate bullet strings for rendering.
+    Filters out hard wraps (newlines) if explicit bullet points are present.
     """
     if not description:
         return []
 
-    # Standardize bullet symbols by converting them to newlines
-    text = description.replace("•", "\n").replace("■", "\n").replace("▪", "\n")
+    # Clean leading/trailing spaces
+    description = description.strip()
     
-    # Also handle markdown style bullet items starting with '*' or '-' followed by space
-    lines = []
-    for line in text.split("\n"):
-        line = line.strip()
-        if not line:
-            continue
-        # Strip leading bullet/dash indicators if they exist
-        if line.startswith("* ") or line.startswith("- "):
-            line = line[2:].strip()
-        elif line.startswith("*") or line.startswith("-"):
-            line = line[1:].strip()
+    # Identify if there are explicit bullet indicators in the text
+    bullet_symbols = ["•", "■", "▪", "* ", "- "]
+    has_explicit_bullets = any(sym in description for sym in bullet_symbols)
+    
+    if has_explicit_bullets:
+        # Standardize bullet symbols to a unique delimiter
+        text = description
+        for sym in bullet_symbols:
+            text = text.replace(sym, "||BULLET||")
+            
+        # Split by the delimiter
+        raw_parts = text.split("||BULLET||")
         
-        if line:
-            lines.append(line)
-
-    # Only treat as bullets if there are multiple lines/points extracted
-    if len(lines) > 1:
-        return lines
-    return []
+        bullets = []
+        for part in raw_parts:
+            # Replace raw internal newlines with spaces to fix copy-paste hard wraps
+            part_clean = part.replace("\n", " ").strip()
+            # Collapse duplicate spaces
+            part_clean = " ".join(part_clean.split())
+            if part_clean:
+                bullets.append(part_clean)
+        return bullets
+    else:
+        # No explicit bullet characters. We split on newlines ONLY if it looks like a clean list
+        # (i.e. each line represents a separate thought/sentence)
+        raw_lines = description.split("\n")
+        bullets = []
+        for line in raw_lines:
+            line_clean = line.strip()
+            if not line_clean:
+                continue
+            
+            # Strip potential leading list markers like single dashes or stars
+            if line_clean.startswith("*") or line_clean.startswith("-"):
+                line_clean = line_clean[1:].strip()
+                
+            if line_clean:
+                bullets.append(line_clean)
+                
+        # If we got multiple distinct lines, treat them as bullets. Otherwise, fallback to single paragraph.
+        if len(bullets) > 1:
+            return bullets
+        return []
 
 
 def normalize_personal_info(data):

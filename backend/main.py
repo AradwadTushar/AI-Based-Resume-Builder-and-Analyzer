@@ -16,6 +16,13 @@ app.mount(
     StaticFiles(directory="templates"),
     name="templates"
 )
+
+@app.middleware("http")
+async def clean_double_slashes_middleware(request, call_next):
+    path = request.scope.get("path", "")
+    if "//" in path:
+        request.scope["path"] = path.replace("//", "/")
+    return await call_next(request)
 # Read extra allowed origins from env (comma-separated)
 _extra_origins = os.getenv("ALLOWED_ORIGINS", "")
 _allowed_origins = [
