@@ -16,6 +16,7 @@ async def verify_clerk_token(request):
         request,
         AuthenticateRequestOptions(
             authorized_parties=[
+                settings.CLERK_AUTHORIZED_PARTIES,
                 "http://localhost:5173",
             ]
         ),
