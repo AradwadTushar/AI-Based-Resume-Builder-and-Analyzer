@@ -10,6 +10,7 @@ function ExportPreviewModal({
   onDownload
 
 }) {
+  const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/+$/, "");
   const [
 
     iframeLoading,
@@ -28,7 +29,11 @@ function ExportPreviewModal({
       setIframeLoading(true);
       axiosClient.get(`/api/resumes/${resumeId}/preview`)
         .then((res) => {
-          setHtmlContent(res.data);
+          let html = res.data || "";
+          if (html.includes("<head>")) {
+            html = html.replace("<head>", `<head><base href="${API_BASE_URL}/">`);
+          }
+          setHtmlContent(html);
           setIframeLoading(false);
         })
         .catch((err) => {
