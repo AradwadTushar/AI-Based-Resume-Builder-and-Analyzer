@@ -2,7 +2,9 @@ import json
 from config import settings
 from .ai_client import get_model
 
-model = get_model()
+def get_gemini_model():
+    """Helper to fetch the current configured AI model provider."""
+    return get_model()
 
 
 def _clean_json_response(text: str) -> str:
@@ -58,6 +60,7 @@ def _infer_role_context(data: dict) -> str:
 
 
 async def generate_summary(data: dict) -> str:
+    model = get_gemini_model()
     role_context = _infer_role_context(data)
 
     prompt = f"""
@@ -91,6 +94,7 @@ Rules:
 
 
 async def rewrite_experience(data: dict) -> str:
+    model = get_gemini_model()
     prompt = f"""
 You are an expert ATS-friendly resume writing assistant.
 
@@ -117,7 +121,8 @@ Rules:
     return response.text.strip()
 
 
-async def analyze_resume(data: dict):
+async def analyze_resume(data: dict) -> dict:
+    model = get_gemini_model()
     role_context = _infer_role_context(data)
 
     prompt = f"""
@@ -165,13 +170,13 @@ Required JSON format:
     try:
         return json.loads(cleaned)
     except json.JSONDecodeError as e:
-        # Log the raw response for debugging and raise cleanly
         print(f"[analyze_resume] JSON parse failed: {e}")
         print(f"[analyze_resume] Raw response: {response.text}")
         raise ValueError("AI returned malformed JSON. Please try again.") from e
     
     
-async def match_job_description(data: dict):
+async def match_job_description(data: dict) -> dict:
+    model = get_gemini_model()
     prompt = f"""
 You are an ATS optimization expert.
 
@@ -209,16 +214,19 @@ Rules:
 """
 
     response = model.generate_content(prompt)
+    cleaned = _clean_json_response(response.text)
 
-    cleaned = _clean_json_response(
-        response.text
-    )
-
-    return json.loads(cleaned)
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError as e:
+        print(f"[match_job_description] JSON parse failed: {e}")
+        print(f"[match_job_description] Raw response: {response.text}")
+        raise ValueError("AI returned malformed JSON matching the Job Description. Please try again.") from e
 
 
 async def analyze_raw_resume(resume_text: str, job_description: str | None = None) -> dict:
     """Analyzes raw resume text, optionally against a job description, and returns structured feedback."""
+    model = get_gemini_model()
     if job_description:
         prompt = f"""
 You are an expert ATS optimization assistant.
@@ -285,10 +293,17 @@ Required JSON format:
 
     response = model.generate_content(prompt)
     cleaned = _clean_json_response(response.text)
-    return json.loads(cleaned)
+    
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError as e:
+        print(f"[analyze_raw_resume] JSON parse failed: {e}")
+        print(f"[analyze_raw_resume] Raw response: {response.text}")
+        raise ValueError("AI returned malformed JSON during raw analysis. Please try again.") from e
 
 
 async def generate_cover_letter_service(data: dict) -> str:
+    model = get_gemini_model()
     resume_data = data.get("resume_data", {})
     job_description = data.get("job_description", "")
 
@@ -316,4 +331,4 @@ Rules:
 5. Return ONLY the plain text of the cover letter. Do not include any HTML tags, conversational introductions, or markdown fences.
 """
     response = model.generate_content(prompt)
-    return response.text.strip()
+    return response.text.strip()
