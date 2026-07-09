@@ -91,7 +91,7 @@ function HeroMockup() {
 
       {/* Floating Card - Top Left */}
       <div
-        className="hero-float absolute z-20 flex items-center gap-2 rounded-xl border bg-white/90 dark:bg-slate-900/85 border-white dark:border-indigo-400/30 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 backdrop-blur-md"
+        className="hero-float absolute z-20 hidden sm:flex items-center gap-2 rounded-xl border bg-white/90 dark:bg-slate-900/85 border-white dark:border-indigo-400/30 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 backdrop-blur-md"
         style={{
           top: "4%",
           left: "-6%",
@@ -106,7 +106,7 @@ function HeroMockup() {
 
       {/* Floating Card - Top Right */}
       <div
-        className="hero-float absolute z-20 flex items-center gap-2 rounded-xl border bg-white/90 dark:bg-slate-900/85 border-white dark:border-indigo-400/30 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 backdrop-blur-md"
+        className="hero-float absolute z-20 hidden sm:flex items-center gap-2 rounded-xl border bg-white/90 dark:bg-slate-900/85 border-white dark:border-indigo-400/30 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 backdrop-blur-md"
         style={{
           top: "14%",
           right: "-8%",
@@ -122,7 +122,7 @@ function HeroMockup() {
 
       {/* Floating Card - Bottom Left */}
       <div
-        className="hero-float absolute z-20 flex items-center gap-2 rounded-xl border bg-white/90 dark:bg-slate-900/85 border-white dark:border-indigo-400/30 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 backdrop-blur-md"
+        className="hero-float absolute z-20 hidden sm:flex items-center gap-2 rounded-xl border bg-white/90 dark:bg-slate-900/85 border-white dark:border-indigo-400/30 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 backdrop-blur-md"
         style={{
           bottom: "6%",
           left: "-10%",
@@ -284,7 +284,7 @@ function HeroMockup() {
 
       {/* Floating Card - Bottom Right */}
       <div
-        className="hero-float absolute z-20 flex items-center gap-2 rounded-xl border bg-white/90 dark:bg-slate-900/85 border-white dark:border-indigo-400/30 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 backdrop-blur-md"
+        className="hero-float absolute z-20 hidden sm:flex items-center gap-2 rounded-xl border bg-white/90 dark:bg-slate-900/85 border-white dark:border-indigo-400/30 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 backdrop-blur-md"
         style={{
           bottom: "12%",
           right: "-6%",

@@ -10,7 +10,7 @@ function TemplateSelector({ selectedTemplate, onSelect }) {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-850 text-slate-700 dark:text-slate-200 transition shadow-xs w-44 justify-between"
+        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-850 text-slate-700 dark:text-slate-200 transition shadow-xs w-full justify-between"
       >
         <span className="truncate">{current.name}</span>
         <span className="flex items-center gap-1 text-slate-400 dark:text-slate-500 shrink-0">

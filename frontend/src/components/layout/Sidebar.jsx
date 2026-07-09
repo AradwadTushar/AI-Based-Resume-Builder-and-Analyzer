@@ -13,31 +13,34 @@ import {
 import fullLogo from "../../assets/full_logo.png";
 import logoIcon from "../../assets/logo_icon.png";
 
-function Sidebar() {
+function Sidebar({ isMobile = false }) {
   const [collapsed, setCollapsed] = useState(false);
+  const isCurrentlyCollapsed = isMobile ? false : collapsed;
 
   return (
     <aside className={`
-      ${collapsed ? "w-[72px]" : "w-[220px]"} 
-      h-screen flex flex-col justify-between 
-      bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800/80
+      ${isCurrentlyCollapsed ? "w-[72px]" : "w-[220px]"} 
+      ${isMobile ? "h-full" : "h-screen"} flex flex-col justify-between 
+      bg-white dark:bg-slate-900 ${isMobile ? "" : "border-r border-slate-100 dark:border-slate-800/80"}
       transition-all duration-300 ease-in-out shrink-0 z-10 relative
     `}>
 
       {/* Logo Section */}
       <div>
         <div className="flex items-center justify-between px-4 py-4 border-b border-slate-100 dark:border-slate-800/80">
-          {collapsed ? (
+          {isCurrentlyCollapsed ? (
             <img src={logoIcon} alt="ResumeIQ" className="w-14 h-14 -m-3 object-contain dark:brightness-110 scale-125" />
           ) : (
             <img src={fullLogo} alt="ResumeIQ AI" className="h-16 -my-4 -mx-2 object-contain dark:brightness-110 scale-125 origin-left" />
           )}
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="p-1 rounded-md text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
-          >
-            {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-          </button>
+          {!isMobile && (
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className="p-1 rounded-md text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+            >
+              {isCurrentlyCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            </button>
+          )}
         </div>
 
         {/* Navigation Links */}
@@ -54,7 +57,7 @@ function Sidebar() {
             }
           >
             <LayoutDashboard className="w-4 h-4 shrink-0" />
-            {!collapsed && <span>Dashboard</span>}
+            {!isCurrentlyCollapsed && <span>Dashboard</span>}
           </NavLink>
 
           <NavLink 
@@ -69,7 +72,7 @@ function Sidebar() {
             }
           >
             <TrendingUp className="w-4 h-4 shrink-0" />
-            {!collapsed && <span>ATS Analyzer</span>}
+            {!isCurrentlyCollapsed && <span>ATS Analyzer</span>}
           </NavLink>
 
           <NavLink 
@@ -84,7 +87,7 @@ function Sidebar() {
             }
           >
             <HelpCircle className="w-4 h-4 shrink-0" />
-            {!collapsed && <span>ATS Secrets</span>}
+            {!isCurrentlyCollapsed && <span>ATS Secrets</span>}
           </NavLink>
 
           <NavLink 
@@ -99,7 +102,7 @@ function Sidebar() {
             }
           >
             <HistoryIcon className="w-4 h-4 shrink-0" />
-            {!collapsed && <span>History</span>}
+            {!isCurrentlyCollapsed && <span>History</span>}
           </NavLink>
 
           <NavLink 
@@ -114,7 +117,7 @@ function Sidebar() {
             }
           >
             <Info className="w-4 h-4 shrink-0" />
-            {!collapsed && <span>About</span>}
+            {!isCurrentlyCollapsed && <span>About</span>}
           </NavLink>
         </nav>
       </div>
@@ -123,7 +126,7 @@ function Sidebar() {
       <div className="border-t border-slate-100 dark:border-slate-800/80 px-3 py-4">
         <div className="flex items-center gap-3 px-2">
           <UserButton showName={false} />
-          {!collapsed && (
+          {!isCurrentlyCollapsed && (
             <div className="text-left min-w-0">
               <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate">My Account</p>
               <p className="text-[10px] text-slate-400 dark:text-slate-500">Manage settings</p>

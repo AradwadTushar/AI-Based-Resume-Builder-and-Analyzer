@@ -18,13 +18,13 @@ function Landing() {
     <div className="min-h-screen font-sans text-slate-800 dark:text-slate-100 relative overflow-hidden select-none bg-white dark:bg-slate-950">
 
       {/* ── NAVBAR ── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm border-b border-slate-100 dark:border-slate-900 px-6 lg:px-12 py-3 flex items-center justify-between">
-        <img src={fullLogo} alt="ResumeIQ AI" className="h-16 lg:h-20 -my-4 object-contain scale-125 origin-left" />
-        <div className="flex items-center gap-3">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm border-b border-slate-100 dark:border-slate-900 px-4 sm:px-6 lg:px-12 py-3 flex items-center justify-between">
+        <img src={fullLogo} alt="ResumeIQ AI" className="h-12 sm:h-16 lg:h-20 -my-4 object-contain scale-110 sm:scale-125 origin-left" />
+        <div className="flex items-center gap-1.5 sm:gap-3">
           <SignedIn>
             <Link 
               to="/dashboard" 
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-xl text-sm transition shadow-md"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3 sm:px-5 rounded-xl text-xs sm:text-sm transition shadow-md whitespace-nowrap"
             >
               Go to Dashboard
             </Link>
@@ -32,13 +32,13 @@ function Landing() {
           <SignedOut>
             <Link 
               to="/sign-in" 
-              className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-semibold text-sm transition px-3 py-2"
+              className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-semibold text-xs sm:text-sm transition px-2 sm:px-3 py-2 whitespace-nowrap"
             >
               Sign In
             </Link>
             <Link 
               to="/sign-up" 
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-xl text-sm transition shadow-md"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3 sm:px-5 rounded-xl text-xs sm:text-sm transition shadow-md whitespace-nowrap"
             >
               Get Started Free
             </Link>

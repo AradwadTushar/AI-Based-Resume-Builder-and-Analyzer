@@ -374,32 +374,41 @@ const handleTemplateChange =
     <div className="h-screen bg-white dark:bg-slate-950 flex flex-col font-sans select-none print:bg-white print:block overflow-hidden">
       
       {/* ── STICKY GLASSMORPHIC HEADER CONTROL BAR ── */}
-      <header className="z-40 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 px-4 py-2.5 flex items-center justify-between gap-4 shrink-0 print:hidden">
-        {/* Left Info */}
-        <div className="flex items-center gap-3">
-          <Link 
-            to="/dashboard"
-            className="p-2 rounded-lg text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
-            title="Back to Dashboard"
-          >
-            <LayoutDashboard className="w-4 h-4" />
-          </Link>
-          <div className="text-left">
-            <input 
-              type="text"
-              value={formData?.title || ""}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="text-base font-bold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded px-1.5 py-0.5 bg-transparent border-0 hover:bg-slate-100 dark:hover:bg-slate-800 transition truncate max-w-[150px] sm:max-w-[200px]"
+      <header className="z-45 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 px-4 py-2 sm:py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 shrink-0 print:hidden">
+        {/* Left Info & Mobile Template Selector */}
+        <div className="flex items-center justify-between w-full sm:w-auto gap-3">
+          <div className="flex items-center gap-3">
+            <Link 
+              to="/dashboard"
+              className="p-2 rounded-lg text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
+              title="Back to Dashboard"
+            >
+              <LayoutDashboard className="w-4 h-4" />
+            </Link>
+            <div className="text-left">
+              <input 
+                type="text"
+                value={formData?.title || ""}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className="text-base font-bold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded px-1.5 py-0.5 bg-transparent border-0 hover:bg-slate-100 dark:hover:bg-slate-800 transition truncate max-w-[120px] sm:max-w-[200px]"
+              />
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 flex items-center gap-1.5 pl-2 mt-0.5">
+                <span className={`inline-block w-1.5 h-1.5 rounded-full ${saveStatus === "Saving..." ? "bg-amber-500 animate-ping" : "bg-emerald-500"}`} />
+                {saveStatus}
+              </p>
+            </div>
+          </div>
+
+          <div className="w-32 sm:hidden">
+            <TemplateSelector
+              selectedTemplate={formData.template || "engineer"}
+              onSelect={handleTemplateChange}
             />
-            <p className="text-[10px] text-slate-400 dark:text-slate-500 flex items-center gap-1.5 pl-2 mt-0.5">
-              <span className={`inline-block w-1.5 h-1.5 rounded-full ${saveStatus === "Saving..." ? "bg-amber-500 animate-ping" : "bg-emerald-500"}`} />
-              {saveStatus}
-            </p>
           </div>
         </div>
 
-        {/* Center Template Selector */}
-        <div className="w-44">
+        {/* Center Template Selector for Desktop */}
+        <div className="hidden sm:block w-44">
           <TemplateSelector
             selectedTemplate={formData.template || "engineer"}
             onSelect={handleTemplateChange}
@@ -407,42 +416,42 @@ const handleTemplateChange =
         </div>
 
         {/* Right Actions */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
           {/* AI Scan Actions */}
           <button
             onClick={handleOpenATS}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition shadow-xs disabled:opacity-50"
+            className="flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition shadow-xs disabled:opacity-50 shrink-0"
             disabled={!hasResumeContent()}
             title={!hasResumeContent() ? "Add resume content first" : "Run ATS Scan"}
           >
             <Sparkles className="text-indigo-500 w-3.5 h-3.5 animate-pulse" />
-            Analyze
+            <span className="hidden sm:inline">Analyze</span>
           </button>
           
           <button
             onClick={() => setJdModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition shadow-xs disabled:opacity-50"
+            className="flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition shadow-xs disabled:opacity-50 shrink-0"
             disabled={!hasResumeContent()}
             title={!hasResumeContent() ? "Add resume content first" : "Test Match against Job Desc"}
           >
             <HelpCircle className="text-emerald-500 w-3.5 h-3.5" />
-            Job Match
+            <span className="hidden sm:inline">Job Match</span>
           </button>
 
           <button
             onClick={() => setCoverLetterOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition shadow-xs disabled:opacity-50"
+            className="flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition shadow-xs disabled:opacity-50 shrink-0"
             disabled={!hasResumeContent()}
             title={!hasResumeContent() ? "Add resume content first" : "Generate Cover Letter"}
           >
             <Sparkles className="text-violet-500 w-3.5 h-3.5" />
-            Cover Letter
+            <span className="hidden sm:inline">Cover Letter</span>
           </button>
 
           {/* Toggle Live Preview */}
           <button
             onClick={() => setPreviewExpanded(!previewExpanded)}
-            className={`p-2 rounded-lg border transition shadow-xs ${previewExpanded ? "bg-indigo-50 text-indigo-600 border-indigo-200" : "bg-white text-slate-400 border-slate-200 hover:text-slate-600"}`}
+            className={`p-2 rounded-lg border transition shadow-xs shrink-0 ${previewExpanded ? "bg-indigo-50 text-indigo-600 border-indigo-200" : "bg-white text-slate-400 border-slate-200 hover:text-slate-600"}`}
             title={previewExpanded ? "Collapse Live Preview" : "Expand Live Preview"}
           >
             {previewExpanded ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -451,10 +460,10 @@ const handleTemplateChange =
           {/* Export PDF Modal trigger */}
           <button
             onClick={handleDownload}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3.5 rounded-lg text-xs transition shadow-md hover:shadow-lg flex items-center gap-1.5"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3 sm:px-3.5 rounded-lg text-xs transition shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 shrink-0"
           >
             <Download className="w-3.5 h-3.5" />
-            Download
+            <span className="hidden sm:inline">Download</span>
           </button>
         </div>
       </header>
@@ -463,7 +472,7 @@ const handleTemplateChange =
       <div className={`grid grid-cols-1 ${previewExpanded ? "lg:grid-cols-12" : "lg:grid-cols-1"} flex-1 overflow-hidden print:block`}>
         
         {/* LEFT PANEL: EDITOR FORMS */}
-        <div className={`p-5 border-r border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-y-auto h-full print:hidden ${previewExpanded ? "lg:col-span-6 xl:col-span-5" : "lg:col-span-1 max-w-4xl mx-auto w-full"}`}>
+        <div className={`p-5 border-r border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-y-auto h-full print:hidden ${previewExpanded ? "hidden lg:block lg:col-span-6 xl:col-span-5" : "lg:col-span-1 max-w-4xl mx-auto w-full"}`}>
           
           {/* Tabs switch navigation */}
           <div className="flex border-b border-slate-200 dark:border-slate-800 pb-px mb-6 overflow-x-auto gap-2">
