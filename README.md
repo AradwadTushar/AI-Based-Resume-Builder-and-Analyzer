@@ -67,42 +67,52 @@ Below are the core page designs that make up the ResumeIQ AI ecosystem:
 
 ---
 
-## 🏗 Architecture
+## 🏗 Architecture & Cloud Infrastructure
 
-### Hybrid Rendering & Data Lifecycle Flow
+### System Topology
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                  FRONTEND (React + Vite + Tailwind)         │
-│                                                               │
-│   Landing → Dashboard → Editor Workspace → History Log       │
-│                                                               │
-│   State Changes ──► [Debounced Hook Timeout]                  │
-│                            │                                  │
-│                            ▼                                  │
-│            PUT /api/resumes/{id} (JSONB Schema + JWT)         │
-└────────────────────────────┬──────────────────────────────────┘
-                             │ Axios Interceptors (Clerk Token)
-┌────────────────────────────▼──────────────────────────────────┐
-│                    BACKEND (FastAPI Async)                    │
-│                                                               │
-│   /auth/verify   ──► Maps external token to PostgreSQL row    │
-│   /resumes/crud  ──► Persists multi-user ownership state      │
-│   /analyze       ──► Extracts PDF text via pdfminer.six       │
-│   /export        ──► normalizes context via Template Registry │
-│                        │                                      │
-│                        ▼                                      │
-│             [Jinja2 HTML Compiling Engine]                    │
-│                        │                                      │
-│                        ▼                                      │
-│             [WeasyPrint Local PDF Transpiler]                 │
-└────────────────────────────┬──────────────────────────────────┘
-                             │
-┌────────────────────────────▼──────────────────────────────────┐
-│                    PRODUCTION DATA STORAGE                    │
-│                                                               │
-│   PostgreSQL (JSONB Documents + Secure Auth Mappings)         │
-└───────────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph Client ["Frontend (Cloudflare Pages)"]
+        UI["React 18 + Vite + TailwindCSS"]
+        AuthUI["Clerk Auth Component"]
+        Editor["Live Preview & Split-Form Editor"]
+        HealthCheck["BackendStatusBanner (Cold-start detector)"]
+    end
+
+    subgraph Auth ["Authentication"]
+        Clerk["Clerk Identity Provider (RS256 JWT)"]
+    end
+
+    subgraph Backend ["Backend API (Render Docker Web Service)"]
+        FastAPI["FastAPI Async Engine (ASGI / Python 3.12)"]
+        CORS["CORS Middleware (Cloudflare Pages Allowlist)"]
+        AuthMiddleware["JWT Asymmetric Token Verification"]
+        WeasyPrint["WeasyPrint + Cairo PDF Rendering Pipeline"]
+        PDFParser["pdfminer.six Local PDF Extractor"]
+    end
+
+    subgraph AI ["AI Intelligence Layer"]
+        Gemini["Google Gemini 1.5 Flash API"]
+    end
+
+    subgraph Database ["Serverless Persistence (Neon.tech)"]
+        Neon["PostgreSQL 16 (JSONB Schemas + asyncpg Pool)"]
+        Alembic["Alembic Migration Engine"]
+    end
+
+    UI --> AuthUI
+    AuthUI -->|Login / Session| Clerk
+    UI -->|JWT Bearer Token| CORS
+    CORS --> FastAPI
+    FastAPI --> AuthMiddleware
+    AuthMiddleware -->|Validate RS256| Clerk
+    FastAPI -->|Async Session / SQLAlchemy| Neon
+    Alembic -->|Schema Sync on Startup| Neon
+    FastAPI -->|Extract Raw Text| PDFParser
+    FastAPI -->|Semantic Keyword & Score Prompt| Gemini
+    FastAPI -->|Jinja2 Context + CSS Engine| WeasyPrint
+    WeasyPrint -->|Pixel-Perfect Binary PDF| UI
 ```
 
 ---
