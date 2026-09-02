@@ -18,7 +18,11 @@ import {
   FileText, 
   Check, 
   RefreshCw,
-  Layers
+  Layers,
+  User,
+  Briefcase,
+  GraduationCap,
+  FolderGit2
 } from "lucide-react";
 
 // Core Form Section Component Imports
@@ -38,6 +42,8 @@ import SectionOrderModal from "../components/editor/SectionOrderModal";
 import ATSAnalysisModal from "../components/editor/ATSAnalysisModal";
 import JDMatchModal from "../components/editor/JDMatchSection";
 import CoverLetterModal from "../components/editor/CoverLetterModal";
+import QuotaBadge from "../components/common/QuotaBadge";
+import QuotaLimitModal from "../components/common/QuotaLimitModal";
 
 // Decoupled Preview Engine System Import
 import ResumePreview from "../components/preview/ResumePreview";
@@ -90,6 +96,15 @@ function ResumeEditor() {
 
   // Section ordering modal state
   const [orderModalOpen, setOrderModalOpen] = useState(false);
+
+  // AI quota limit modal state
+  const [quotaModalOpen, setQuotaModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleExceeded = () => setQuotaModalOpen(true);
+    window.addEventListener("ai-quota-exceeded", handleExceeded);
+    return () => window.removeEventListener("ai-quota-exceeded", handleExceeded);
+  }, []);
 
   useEffect(() => {
     const fetchResume = async () => {
@@ -406,10 +421,10 @@ const handleTemplateChange =
   }
 
   const tabs = [
-    { id: "personal", label: "👤 Profile" },
-    { id: "work", label: "💼 Work" },
-    { id: "skills", label: "🎓 Skills" },
-    { id: "projects", label: "🚀 Projects" }
+    { id: "personal", label: "Profile", icon: User },
+    { id: "work", label: "Experience", icon: Briefcase },
+    { id: "skills", label: "Education & Skills", icon: GraduationCap },
+    { id: "projects", label: "Projects", icon: FolderGit2 }
   ];
 
   return (
@@ -459,6 +474,9 @@ const handleTemplateChange =
 
         {/* Right Actions */}
         <div className="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+          {/* Real-time AI Quota Counter / Admin Badge */}
+          <QuotaBadge onQuotaExceeded={() => setQuotaModalOpen(true)} />
+
           {/* AI Scan Actions */}
           <button
             onClick={handleOpenATS}
@@ -519,19 +537,23 @@ const handleTemplateChange =
           {/* Tabs switch navigation & section reordering */}
           <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-px mb-6 overflow-x-auto gap-2">
             <div className="flex gap-2">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-2 border-b-2 font-bold text-xs transition whitespace-nowrap ${
-                    activeTab === tab.id
-                      ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
-                      : "border-transparent text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+              {tabs.map((tab) => {
+                const TabIcon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`inline-flex items-center gap-1.5 px-3.5 py-2 border-b-2 font-bold text-xs transition whitespace-nowrap cursor-pointer ${
+                      activeTab === tab.id
+                        ? "border-cyan-500 text-cyan-600 dark:text-cyan-400"
+                        : "border-transparent text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+                    }`}
+                  >
+                    <TabIcon className="w-3.5 h-3.5" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
             </div>
 
             <button
@@ -684,6 +706,10 @@ const handleTemplateChange =
         onSave={(newOrder) =>
           setFormData((prev) => ({ ...prev, sectionOrder: newOrder }))
         }
+      />
+      <QuotaLimitModal
+        isOpen={quotaModalOpen}
+        onClose={() => setQuotaModalOpen(false)}
       />
     </div>
   );

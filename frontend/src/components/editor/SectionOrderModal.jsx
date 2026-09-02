@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { ArrowUp, ArrowDown, RotateCcw, Check, X, Layers, GripVertical } from "lucide-react";
+import { 
+  ArrowUp, 
+  ArrowDown, 
+  RotateCcw, 
+  Check, 
+  X, 
+  Layers,
+  FileText,
+  Briefcase,
+  FolderGit2,
+  GraduationCap,
+  Cpu,
+  Award
+} from "lucide-react";
 
 export const DEFAULT_SECTION_ORDER = [
   "summary",
@@ -11,12 +24,12 @@ export const DEFAULT_SECTION_ORDER = [
 ];
 
 export const SECTION_METADATA = {
-  summary: { label: "Professional Summary", icon: "📝" },
-  experience: { label: "Work Experience", icon: "💼" },
-  projects: { label: "Projects / Portfolio", icon: "🚀" },
-  education: { label: "Education & Degrees", icon: "🎓" },
-  skills: { label: "Skills & Proficiencies", icon: "⚡" },
-  certifications: { label: "Licenses & Certifications", icon: "📜" },
+  summary: { label: "Professional Summary", icon: FileText },
+  experience: { label: "Work Experience", icon: Briefcase },
+  projects: { label: "Projects & Portfolio", icon: FolderGit2 },
+  education: { label: "Education & Degrees", icon: GraduationCap },
+  skills: { label: "Skills & Proficiencies", icon: Cpu },
+  certifications: { label: "Licenses & Certifications", icon: Award },
 };
 
 export default function SectionOrderModal({
@@ -88,17 +101,20 @@ export default function SectionOrderModal({
 
           <div className="space-y-2">
             {order.map((key, index) => {
-              const meta = SECTION_METADATA[key] || { label: key, icon: "📄" };
+              const meta = SECTION_METADATA[key] || { label: key, icon: FileText };
+              const IconComponent = meta.icon;
               return (
                 <div
                   key={key}
-                  className="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40 hover:border-indigo-300 dark:hover:border-indigo-800 transition"
+                  className="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40 hover:border-cyan-500/40 dark:hover:border-cyan-500/40 transition"
                 >
                   <div className="flex items-center gap-3">
                     <span className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center justify-center">
                       {index + 1}
                     </span>
-                    <span className="text-base select-none">{meta.icon}</span>
+                    <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+                      <IconComponent className="w-4 h-4" />
+                    </div>
                     <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
                       {meta.label}
                     </span>

@@ -136,9 +136,9 @@ export default function JDMatchModal({
               {jdAnalysis.hard_skills?.length > 0 && (
                 <SkillSection
                   title="Required Hard Skills & Technologies"
-                  icon="⚡"
+                  icon={<Cpu className="w-3.5 h-3.5 text-cyan-500" />}
                   keywords={jdAnalysis.hard_skills}
-                  chipClass="bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-900/40"
+                  chipClass="bg-cyan-500/10 text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/20"
                   copiedKeyword={copiedKeyword}
                   onCopy={handleCopySkill}
                 />
@@ -147,10 +147,10 @@ export default function JDMatchModal({
               {/* Soft Skills */}
               {jdAnalysis.soft_skills?.length > 0 && (
                 <SkillSection
-                  title="Soft Skills & Working Style"
-                  icon="🤝"
+                  title="Soft Skills & Leadership"
+                  icon={<Users className="w-3.5 h-3.5 text-purple-400" />}
                   keywords={jdAnalysis.soft_skills}
-                  chipClass="bg-purple-50 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-900/40"
+                  chipClass="bg-purple-500/10 text-purple-300 border-purple-500/30 hover:bg-purple-500/20"
                   copiedKeyword={copiedKeyword}
                   onCopy={handleCopySkill}
                 />
@@ -159,10 +159,10 @@ export default function JDMatchModal({
               {/* Missing Keywords */}
               {jdAnalysis.missing_keywords?.length > 0 && (
                 <SkillSection
-                  title="Missing Keywords (Not found in your draft)"
-                  icon="✗"
+                  title="Missing Keywords (Not found in draft)"
+                  icon={<XCircle className="w-3.5 h-3.5 text-rose-500" />}
                   keywords={jdAnalysis.missing_keywords}
-                  chipClass="bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-900/40 hover:bg-rose-100"
+                  chipClass="bg-rose-500/10 text-rose-300 border-rose-500/30 hover:bg-rose-500/20"
                   copiedKeyword={copiedKeyword}
                   onCopy={handleCopySkill}
                 />
@@ -171,10 +171,10 @@ export default function JDMatchModal({
               {/* Matched Keywords */}
               {jdAnalysis.matched_keywords?.length > 0 && (
                 <SkillSection
-                  title="Matched Keywords (Present in your resume)"
-                  icon="✓"
+                  title="Matched Keywords (Found in resume)"
+                  icon={<CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
                   keywords={jdAnalysis.matched_keywords}
-                  chipClass="bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900/40"
+                  chipClass="bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20"
                   copiedKeyword={copiedKeyword}
                   onCopy={handleCopySkill}
                 />
@@ -183,17 +183,17 @@ export default function JDMatchModal({
               {/* Recommendations */}
               {jdAnalysis.recommendations?.length > 0 && (
                 <div className="space-y-2.5">
-                  <h3 className="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <span>💡</span>
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
                     <span>Targeted Recommendations</span>
                   </h3>
                   <ul className="space-y-1.5">
                     {jdAnalysis.recommendations.map((rec, i) => (
                       <li
                         key={i}
-                        className="flex items-start gap-2.5 text-xs text-gray-700 dark:text-slate-300 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/80"
+                        className="flex items-start gap-2.5 text-xs text-slate-300 p-2.5 rounded-lg bg-slate-950/60 border border-slate-800"
                       >
-                        <span className="flex-shrink-0 w-4 h-4 rounded-full bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 text-[10px] flex items-center justify-center font-bold mt-0.5">
+                        <span className="flex-shrink-0 w-4 h-4 rounded-full bg-indigo-950 text-indigo-400 text-[10px] flex items-center justify-center font-bold mt-0.5">
                           {i + 1}
                         </span>
                         <span>{rec}</span>
@@ -214,7 +214,7 @@ function SkillSection({ title, icon, keywords, chipClass, copiedKeyword, onCopy 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-bold text-gray-600 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+        <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
           <span>{icon}</span>
           <span>{title}</span>
         </h3>

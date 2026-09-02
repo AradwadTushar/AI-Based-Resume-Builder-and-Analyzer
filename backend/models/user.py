@@ -1,4 +1,4 @@
-from sqlalchemy import String
+from sqlalchemy import String, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from models.base import Base
@@ -18,6 +18,18 @@ class User(Base, UUIDMixin, TimestampMixin):
         String,
         unique=True,
         nullable=True,
+    )
+
+    role: Mapped[str] = mapped_column(
+        String,
+        default="user",
+        nullable=False,
+    )
+
+    ai_requests_count: Mapped[int] = mapped_column(
+        Integer,
+        default=0,
+        nullable=False,
     )
 
     resumes = relationship(
