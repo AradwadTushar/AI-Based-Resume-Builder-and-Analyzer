@@ -1,5 +1,48 @@
+from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import field_validator
+
+
+def clean_postgres_asyncpg_url(url: str) -> str:
+    if not isinstance(url, str):
+        return url
+    url = url.strip()
+
+    # Replace dialect with postgresql+asyncpg
+    if url.startswith("postgres://"):
+        url = "postgresql+asyncpg://" + url[len("postgres://"):]
+    elif url.startswith("postgresql://") and not url.startswith("postgresql+asyncpg://"):
+        url = "postgresql+asyncpg://" + url[len("postgresql://"):]
+
+    parsed = urlparse(url)
+    query_params = parse_qs(parsed.query)
+
+    # Filter query parameters for asyncpg compatibility
+    cleaned_params = {}
+
+    # Handle SSL
+    if "sslmode" in query_params:
+        mode = query_params["sslmode"][0]
+        if mode in ("require", "verify-ca", "verify-full", "prefer"):
+            cleaned_params["ssl"] = "require"
+    elif "ssl" in query_params:
+        cleaned_params["ssl"] = query_params["ssl"][0]
+
+    # Only pass allowed asyncpg parameters; ignore libpq-only parameters like channel_binding
+    allowed_keys = {"ssl", "timeout", "command_timeout", "server_settings"}
+    for k, v in query_params.items():
+        if k in allowed_keys and k not in cleaned_params:
+            cleaned_params[k] = v[0]
+
+    new_query = urlencode(cleaned_params)
+    return urlunparse((
+        parsed.scheme,
+        parsed.netloc,
+        parsed.path,
+        parsed.params,
+        new_query,
+        parsed.fragment
+    ))
 
 
 class Settings(BaseSettings):
@@ -11,17 +54,7 @@ class Settings(BaseSettings):
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
     def assemble_db_connection(cls, v: str) -> str:
-        if isinstance(v, str):
-            v = v.strip()
-            # Standardize postgres dialect to asyncpg for SQLAlchemy
-            if v.startswith("postgres://"):
-                v = v.replace("postgres://", "postgresql+asyncpg://", 1)
-            elif v.startswith("postgresql://") and not v.startswith("postgresql+asyncpg://"):
-                v = v.replace("postgresql://", "postgresql+asyncpg://", 1)
-            # Normalize sslmode for asyncpg
-            if "sslmode=" in v:
-                v = v.replace("sslmode=require", "ssl=require").replace("sslmode=prefer", "ssl=prefer")
-        return v
+        return clean_postgres_asyncpg_url(v)
 
     model_config = SettingsConfigDict(
         env_file=".env",
