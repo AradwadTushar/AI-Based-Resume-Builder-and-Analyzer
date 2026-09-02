@@ -17,7 +17,8 @@ import {
   Download, 
   FileText, 
   Check, 
-  RefreshCw 
+  RefreshCw,
+  Layers
 } from "lucide-react";
 
 // Core Form Section Component Imports
@@ -31,6 +32,8 @@ import SummarySection from "../components/editor/SummarySection";
 import TemplateSelector from "../components/editor/TemplateSelector";
 import ExportPreviewModal from "../components/editor/ExportPreviewModal";
 import RoleCategorySelector from "../components/editor/RoleCategorySelector";
+import DiffSuggestionModal from "../components/editor/DiffSuggestionModal";
+import SectionOrderModal from "../components/editor/SectionOrderModal";
 // Modal Imports
 import ATSAnalysisModal from "../components/editor/ATSAnalysisModal";
 import JDMatchModal from "../components/editor/JDMatchSection";
@@ -72,12 +75,21 @@ function ResumeEditor() {
   useState("");
 
   const [
+    isPreviewOpen,
+    setIsPreviewOpen
+  ] = useState(false);
 
-  isPreviewOpen,
+  // Diff suggestion modal state
+  const [diffModal, setDiffModal] = useState({
+    isOpen: false,
+    title: "",
+    originalText: "",
+    suggestedText: "",
+    onAccept: null,
+  });
 
-  setIsPreviewOpen
-
-] = useState(false);
+  // Section ordering modal state
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchResume = async () => {
@@ -232,7 +244,22 @@ function ResumeEditor() {
         experience: formData.experience,
         education: formData.education,
       });
-      setFormData((prev) => ({ ...prev, summary: response.summary }));
+
+      if (!formData.summary?.trim()) {
+        // If empty, apply directly
+        setFormData((prev) => ({ ...prev, summary: response.summary }));
+      } else {
+        // Open Diff modal for side-by-side review
+        setDiffModal({
+          isOpen: true,
+          title: "AI Professional Summary Review",
+          originalText: formData.summary || "",
+          suggestedText: response.summary,
+          onAccept: (acceptedText) => {
+            setFormData((prev) => ({ ...prev, summary: acceptedText }));
+          },
+        });
+      }
     } catch (error) {
       console.error("Failed to generate summary", error);
     } finally {
@@ -249,7 +276,22 @@ function ResumeEditor() {
         company: experience.company,
         description: experience.description,
       });
-      updateExperience(index, "description", response.improved_description);
+
+      if (!experience.description?.trim()) {
+        // If empty, apply directly
+        updateExperience(index, "description", response.improved_description);
+      } else {
+        // Open Diff modal for side-by-side review
+        setDiffModal({
+          isOpen: true,
+          title: `AI Experience Rewrite (${experience.role || "Role"} at ${experience.company || "Company"})`,
+          originalText: experience.description || "",
+          suggestedText: response.improved_description,
+          onAccept: (acceptedText) => {
+            updateExperience(index, "description", acceptedText);
+          },
+        });
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -474,21 +516,33 @@ const handleTemplateChange =
         {/* LEFT PANEL: EDITOR FORMS */}
         <div className={`p-5 border-r border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-y-auto h-full print:hidden ${previewExpanded ? "hidden lg:block lg:col-span-6 xl:col-span-5" : "lg:col-span-1 max-w-4xl mx-auto w-full"}`}>
           
-          {/* Tabs switch navigation */}
-          <div className="flex border-b border-slate-200 dark:border-slate-800 pb-px mb-6 overflow-x-auto gap-2">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 border-b-2 font-bold text-xs transition whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
-                    : "border-transparent text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
+          {/* Tabs switch navigation & section reordering */}
+          <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-px mb-6 overflow-x-auto gap-2">
+            <div className="flex gap-2">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-4 py-2 border-b-2 font-bold text-xs transition whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
+                      : "border-transparent text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setOrderModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition shrink-0 cursor-pointer"
+              title="Reorder resume sections"
+            >
+              <Layers className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Reorder</span>
+            </button>
           </div>
 
           <div className="space-y-6 pb-12">
@@ -614,6 +668,22 @@ const handleTemplateChange =
         formData={formData}
         jobDescription={jobDescription}
         setJobDescription={setJobDescription}
+      />
+      <DiffSuggestionModal
+        isOpen={diffModal.isOpen}
+        onClose={() => setDiffModal((prev) => ({ ...prev, isOpen: false }))}
+        title={diffModal.title}
+        originalText={diffModal.originalText}
+        suggestedText={diffModal.suggestedText}
+        onAccept={diffModal.onAccept}
+      />
+      <SectionOrderModal
+        isOpen={orderModalOpen}
+        onClose={() => setOrderModalOpen(false)}
+        currentOrder={formData?.sectionOrder}
+        onSave={(newOrder) =>
+          setFormData((prev) => ({ ...prev, sectionOrder: newOrder }))
+        }
       />
     </div>
   );

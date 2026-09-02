@@ -87,6 +87,15 @@ const defaultData = {
   ],
 };
 
+const DEFAULT_ORDER = [
+  "summary",
+  "experience",
+  "projects",
+  "education",
+  "skills",
+  "certifications",
+];
+
 export default function ClassicATSPreview({ formData = defaultData }) {
   if (!formData) return null;
 
@@ -99,6 +108,7 @@ export default function ClassicATSPreview({ formData = defaultData }) {
     education = [],
     certifications = [],
     roleCategory = "software_engineering",
+    sectionOrder = DEFAULT_ORDER,
   } = formData;
 
   const contactItems = [
@@ -109,6 +119,224 @@ export default function ClassicATSPreview({ formData = defaultData }) {
     personalInfo?.github,
     personalInfo?.portfolio,
   ].filter(Boolean);
+
+  const renderSection = (key) => {
+    switch (key) {
+      case "summary":
+        if (!summary) return null;
+        return (
+          <section className="mt-4" key="summary">
+            <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
+              Professional Summary
+            </h2>
+            <p className="text-[9.5pt] text-slate-800 leading-normal mt-1.5 text-justify">
+              {summary}
+            </p>
+          </section>
+        );
+
+      case "education":
+        if (!education || education.length === 0) return null;
+        return (
+          <section className="mt-4" key="education">
+            <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
+              Education
+            </h2>
+            <div className="mt-1.5 space-y-2">
+              {education.map((edu, idx) => (
+                <div key={idx} className="text-[9.5pt]">
+                  <div className="flex justify-between items-baseline font-bold text-slate-900">
+                    <span>{edu.institution || "University"}</span>
+                    <span className="font-normal italic text-slate-700 text-[9pt]">
+                      {edu.location || ""}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-baseline text-slate-800">
+                    <span className="italic">
+                      {edu.degree}
+                      {edu.field ? ` in ${edu.field}` : ""}
+                    </span>
+                    <span className="text-[9pt] text-slate-700 font-sans">
+                      {edu.startDate && edu.endDate
+                        ? `${edu.startDate} – ${edu.endDate}`
+                        : edu.endDate || edu.startDate || ""}
+                    </span>
+                  </div>
+                  {(edu.gpa || edu.honors) && (
+                    <p className="text-[9pt] text-slate-600 mt-0.5">
+                      {edu.gpa ? `GPA: ${edu.gpa}` : ""}
+                      {edu.gpa && edu.honors ? " · " : ""}
+                      {edu.honors ? edu.honors : ""}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+
+      case "experience":
+        if (!experience || experience.length === 0) return null;
+        return (
+          <section className="mt-4" key="experience">
+            <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
+              {roleCategory === "medical"
+                ? "Clinical Experience"
+                : roleCategory === "education"
+                ? "Teaching Experience"
+                : "Professional Experience"}
+            </h2>
+            <div className="mt-1.5 space-y-3">
+              {experience.map((job, idx) => (
+                <div key={idx} className="text-[9.5pt]">
+                  <div className="flex justify-between items-baseline font-bold text-slate-900">
+                    <span>{job.company}</span>
+                    <span className="font-normal italic text-slate-700 text-[9pt]">
+                      {job.location}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-baseline text-slate-800">
+                    <span className="font-semibold italic text-slate-900">
+                      {job.title}
+                    </span>
+                    <span className="text-[9pt] text-slate-700 font-sans">
+                      {job.startDate} – {job.endDate || "Present"}
+                    </span>
+                  </div>
+                  {job.bullets && job.bullets.length > 0 ? (
+                    <ul className="list-disc ml-5 mt-1 space-y-0.5 text-slate-800 text-[9pt] leading-normal">
+                      {job.bullets.map((bullet, bIdx) => (
+                        <li key={bIdx}>{bullet}</li>
+                      ))}
+                    </ul>
+                  ) : job.description ? (
+                    <p className="text-[9pt] text-slate-800 mt-1">
+                      {job.description}
+                    </p>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+
+      case "projects":
+        if (!projects || projects.length === 0) return null;
+        return (
+          <section className="mt-4" key="projects">
+            <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
+              {roleCategory === "design" ? "Portfolio Projects" : "Key Projects"}
+            </h2>
+            <div className="mt-1.5 space-y-2.5">
+              {projects.map((proj, idx) => (
+                <div key={idx} className="text-[9.5pt]">
+                  <div className="flex justify-between items-baseline">
+                    <div>
+                      <span className="font-bold text-slate-900">{proj.name}</span>
+                      {proj.url && (
+                        <span className="text-[8.5pt] text-slate-600 font-sans ml-2">
+                          ({proj.url})
+                        </span>
+                      )}
+                      {proj.techStack && (
+                        <span className="text-[8.5pt] text-slate-600 font-sans ml-2 italic">
+                          |{" "}
+                          {Array.isArray(proj.techStack)
+                            ? proj.techStack.join(", ")
+                            : proj.techStack}
+                        </span>
+                      )}
+                    </div>
+                    {proj.date && (
+                      <span className="text-[9pt] text-slate-700 font-sans">
+                        {proj.date}
+                      </span>
+                    )}
+                  </div>
+                  {proj.bullets && proj.bullets.length > 0 ? (
+                    <ul className="list-disc ml-5 mt-1 space-y-0.5 text-slate-800 text-[9pt] leading-normal">
+                      {proj.bullets.map((b, bIdx) => (
+                        <li key={bIdx}>{b}</li>
+                      ))}
+                    </ul>
+                  ) : proj.description ? (
+                    <p className="text-[9pt] text-slate-800 mt-0.5">
+                      {proj.description}
+                    </p>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+
+      case "skills":
+        if (!skills || skills.length === 0) return null;
+        return (
+          <section className="mt-4" key="skills">
+            <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
+              Skills & Technical Proficiencies
+            </h2>
+            <div className="mt-1.5 text-[9pt] space-y-1 text-slate-800">
+              {skills[0] && typeof skills[0] === "object" && skills[0].category ? (
+                skills.map((grp, idx) => (
+                  <div key={idx} className="flex flex-wrap gap-1">
+                    <span className="font-bold text-slate-900">
+                      {grp.category}:
+                    </span>
+                    <span>
+                      {Array.isArray(grp.items)
+                        ? grp.items.join(", ")
+                        : grp.items}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p>{skills.join(" • ")}</p>
+              )}
+            </div>
+          </section>
+        );
+
+      case "certifications":
+        if (!certifications || certifications.length === 0) return null;
+        return (
+          <section className="mt-4" key="certifications">
+            <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
+              {roleCategory === "medical"
+                ? "Licenses & Certifications"
+                : "Certifications"}
+            </h2>
+            <div className="mt-1.5 space-y-1 text-[9pt]">
+              {certifications.map((cert, idx) => (
+                <div key={idx} className="flex justify-between items-baseline">
+                  <div>
+                    <span className="font-semibold text-slate-900">
+                      {cert.name}
+                    </span>
+                    {cert.issuer && (
+                      <span className="text-slate-600 ml-1.5">
+                        — {cert.issuer}
+                      </span>
+                    )}
+                  </div>
+                  {cert.date && (
+                    <span className="text-slate-700 font-sans">{cert.date}</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  const activeOrder = Array.isArray(sectionOrder) && sectionOrder.length > 0
+    ? sectionOrder
+    : DEFAULT_ORDER;
 
   return (
     <div className="w-full bg-white text-[#111827] antialiased select-text max-w-[210mm] mx-auto p-[18mm] shadow-md border border-gray-100 print:max-w-none print:shadow-none print:border-none print:p-0 font-serif leading-relaxed text-[10pt]">
@@ -136,206 +364,8 @@ export default function ClassicATSPreview({ formData = defaultData }) {
         )}
       </header>
 
-      {/* ── SUMMARY ── */}
-      {summary && (
-        <section className="mt-4">
-          <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
-            Professional Summary
-          </h2>
-          <p className="text-[9.5pt] text-slate-800 leading-normal mt-1.5 text-justify">
-            {summary}
-          </p>
-        </section>
-      )}
-
-      {/* ── EDUCATION ── */}
-      {education && education.length > 0 && (
-        <section className="mt-4">
-          <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
-            Education
-          </h2>
-          <div className="mt-1.5 space-y-2">
-            {education.map((edu, idx) => (
-              <div key={idx} className="text-[9.5pt]">
-                <div className="flex justify-between items-baseline font-bold text-slate-900">
-                  <span>{edu.institution || "University"}</span>
-                  <span className="font-normal italic text-slate-700 text-[9pt]">
-                    {edu.location || ""}
-                  </span>
-                </div>
-                <div className="flex justify-between items-baseline text-slate-800">
-                  <span className="italic">
-                    {edu.degree}
-                    {edu.field ? ` in ${edu.field}` : ""}
-                  </span>
-                  <span className="text-[9pt] text-slate-700 font-sans">
-                    {edu.startDate && edu.endDate
-                      ? `${edu.startDate} – ${edu.endDate}`
-                      : edu.endDate || edu.startDate || ""}
-                  </span>
-                </div>
-                {(edu.gpa || edu.honors) && (
-                  <p className="text-[9pt] text-slate-600 mt-0.5">
-                    {edu.gpa ? `GPA: ${edu.gpa}` : ""}
-                    {edu.gpa && edu.honors ? " · " : ""}
-                    {edu.honors ? edu.honors : ""}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ── EXPERIENCE ── */}
-      {experience && experience.length > 0 && (
-        <section className="mt-4">
-          <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
-            {roleCategory === "medical"
-              ? "Clinical Experience"
-              : roleCategory === "education"
-              ? "Teaching Experience"
-              : "Professional Experience"}
-          </h2>
-          <div className="mt-1.5 space-y-3">
-            {experience.map((job, idx) => (
-              <div key={idx} className="text-[9.5pt]">
-                <div className="flex justify-between items-baseline font-bold text-slate-900">
-                  <span>{job.company}</span>
-                  <span className="font-normal italic text-slate-700 text-[9pt]">
-                    {job.location}
-                  </span>
-                </div>
-                <div className="flex justify-between items-baseline text-slate-800">
-                  <span className="font-semibold italic text-slate-900">
-                    {job.title}
-                  </span>
-                  <span className="text-[9pt] text-slate-700 font-sans">
-                    {job.startDate} – {job.endDate || "Present"}
-                  </span>
-                </div>
-                {job.bullets && job.bullets.length > 0 ? (
-                  <ul className="list-disc ml-5 mt-1 space-y-0.5 text-slate-800 text-[9pt] leading-normal">
-                    {job.bullets.map((bullet, bIdx) => (
-                      <li key={bIdx}>{bullet}</li>
-                    ))}
-                  </ul>
-                ) : job.description ? (
-                  <p className="text-[9pt] text-slate-800 mt-1">
-                    {job.description}
-                  </p>
-                ) : null}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ── PROJECTS ── */}
-      {projects && projects.length > 0 && (
-        <section className="mt-4">
-          <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
-            {roleCategory === "design" ? "Portfolio Projects" : "Key Projects"}
-          </h2>
-          <div className="mt-1.5 space-y-2.5">
-            {projects.map((proj, idx) => (
-              <div key={idx} className="text-[9.5pt]">
-                <div className="flex justify-between items-baseline">
-                  <div>
-                    <span className="font-bold text-slate-900">{proj.name}</span>
-                    {proj.url && (
-                      <span className="text-[8.5pt] text-slate-600 font-sans ml-2">
-                        ({proj.url})
-                      </span>
-                    )}
-                    {proj.techStack && (
-                      <span className="text-[8.5pt] text-slate-600 font-sans ml-2 italic">
-                        |{" "}
-                        {Array.isArray(proj.techStack)
-                          ? proj.techStack.join(", ")
-                          : proj.techStack}
-                      </span>
-                    )}
-                  </div>
-                  {proj.date && (
-                    <span className="text-[9pt] text-slate-700 font-sans">
-                      {proj.date}
-                    </span>
-                  )}
-                </div>
-                {proj.bullets && proj.bullets.length > 0 ? (
-                  <ul className="list-disc ml-5 mt-1 space-y-0.5 text-slate-800 text-[9pt] leading-normal">
-                    {proj.bullets.map((b, bIdx) => (
-                      <li key={bIdx}>{b}</li>
-                    ))}
-                  </ul>
-                ) : proj.description ? (
-                  <p className="text-[9pt] text-slate-800 mt-0.5">
-                    {proj.description}
-                  </p>
-                ) : null}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ── SKILLS ── */}
-      {skills && skills.length > 0 && (
-        <section className="mt-4">
-          <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
-            Skills & Technical Proficiencies
-          </h2>
-          <div className="mt-1.5 text-[9pt] space-y-1 text-slate-800">
-            {skills[0] && typeof skills[0] === "object" && skills[0].category ? (
-              skills.map((grp, idx) => (
-                <div key={idx} className="flex flex-wrap gap-1">
-                  <span className="font-bold text-slate-900">
-                    {grp.category}:
-                  </span>
-                  <span>
-                    {Array.isArray(grp.items)
-                      ? grp.items.join(", ")
-                      : grp.items}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <p>{skills.join(" • ")}</p>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* ── CERTIFICATIONS ── */}
-      {certifications && certifications.length > 0 && (
-        <section className="mt-4">
-          <h2 className="text-[10pt] font-bold text-slate-900 uppercase tracking-wider pb-0.5 border-b border-slate-900 font-sans">
-            {roleCategory === "medical"
-              ? "Licenses & Certifications"
-              : "Certifications"}
-          </h2>
-          <div className="mt-1.5 space-y-1 text-[9pt]">
-            {certifications.map((cert, idx) => (
-              <div key={idx} className="flex justify-between items-baseline">
-                <div>
-                  <span className="font-semibold text-slate-900">
-                    {cert.name}
-                  </span>
-                  {cert.issuer && (
-                    <span className="text-slate-600 ml-1.5">
-                      — {cert.issuer}
-                    </span>
-                  )}
-                </div>
-                {cert.date && (
-                  <span className="text-slate-700 font-sans">{cert.date}</span>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* ── DYNAMIC SECTIONS IN ORDER ── */}
+      {activeOrder.map((key) => renderSection(key))}
     </div>
   );
 }
