@@ -34,16 +34,21 @@ Built using a highly decoupled, stateful async backend and a sleek glass-morphis
 ## ✨ Features
 
 ### 🛠️ Intelligent Resume Builder
-* **✨ Swappable Theme Registry** — Seamlessly shift between multiple ATS-safe, clean layouts (`engineer`, `modern`, `creative`, `photo_professional`) on the fly.
-* **🔄 Dynamic Section Registry** — Form fields, section headers, and preview schemas adapt instantly based on the chosen profession archetype (e.g., renames "Projects" to "Portfolio" for Designers or "Experience" to "Clinical Experience" for Medical tracks).
-* **⏱️ Debounced Autosave System** — State updates persist in-flight to a PostgreSQL `JSONB` schema, minimizing backend API spam while protecting drafting flow.
-* **📸 Passport Photo Compression** — Clean native uploader converting square images into efficient Base64 data strings seamlessly embedded into the document's profile state.
+* **✨ Harvard ATS Single-Column Template** — Classic Ivy League standard layout engineered for 99% parseability across enterprise ATS systems (Workday, Lever, Greenhouse) in both React preview and WeasyPrint print stylesheets.
+* **🔄 Vertical Section Reordering Engine** — Freely shift sections (Summary, Experience, Projects, Education, Skills, Certifications) up/down to suit your career stage with persistent live template synchronization.
+* **⚖️ Side-by-Side Diff Suggestion Acceptor** — Review AI enhancements in a side-by-side comparison modal with live word counts, inline editing, and 1-click Accept & Apply or Dismiss.
+* **📦 Multi-Format Export** — Download pixel-perfect WeasyPrint PDFs, copy portal-ready formatted plain text, or back up via structured JSON schema.
+* **🎨 Swappable Theme Registry** — Seamlessly shift between multiple clean layouts (`classic_ats`, `engineer`, `modern`, `creative`, `photo_professional`) on the fly.
+* **🔄 Dynamic Profession Registry** — Form fields, section headers, and preview schemas adapt instantly based on the chosen profession archetype (Software, Design, Education, Healthcare, Corporate).
+* **⏱️ Debounced Autosave System** — State updates persist in-flight to a PostgreSQL `JSONB` schema, protecting drafting flow.
 
-### 🧠 AI Analytics & Optimization
-* **🔍 PDF Parsing Pipeline** — Local high-speed textual extractions using `pdfminer.six` directly inside the Python environment—zero dependency on external parsers.
-* **🎯 Semantic Keyword Matching** — Leverages LLM context to look beyond strict string matching, recognizing conceptual structural equivalence (e.g., maps `FastAPI` context directly to `REST Backend Development`).
-* **📊 Circular Visual Scorecard** — Animated dashboard featuring visual score indicators, contextual red-tag missing keyword chips, and side-by-side phrasing comparison differentials.
-* **💾 Historical Analytics Archive** — A dedicated chronological tracking page for looking back at past uploads, scores, and targeted feedback trends with safe execution modals.
+### 🧠 AI Analytics, Quotas & Production Guardrails
+* **🎯 Categorized JD Skills Matcher** — Paste target job postings to automatically extract and categorize missing hard skills, soft skills, and keyword gaps with 1-click clipboard copying.
+* **👑 Admin Roles & AI Quota System** — Dedicated Admin bypass for unlimited AI generations (`ADMIN_EMAILS` or Clerk `role="admin"`), coupled with a 5-request allowance for standard accounts and informative upgrade modals.
+* **🛡️ Sliding-Window Rate Limiting** — In-memory rate limiter (15 requests/min) guarding all `/api/ai/*` endpoints against credit exhaustion.
+* **🔍 PDF Parsing Pipeline** — Local high-speed textual extractions using `pdfminer.six` directly inside Python—zero third-party parser lock-in.
+* **📊 Visual Scorecard & Historical Archive** — Circular visual score indicators, missing keyword chips, and historical draft trends.
+* **🧪 Automated Pytest Test Suite** — 13 automated unit tests covering connection sanitization, rate limiting, and quota enforcement.
 
 ---
 
@@ -127,6 +132,7 @@ graph TD
 | **Database/ORM** | PostgreSQL, Async SQLAlchemy 2.0, Alembic Migrations, JSONB Storage |
 | **PDF Engineering** | WeasyPrint, Jinja2 Template Injections, `pdfminer.six` |
 | **AI Intelligence** | Google Gemini 1.5 Flash / Ollama Client Wrapper (Factory Provider Pattern) |
+| **Testing & CI** | Pytest, AnyIO, Async Mock Fixtures (13 Automated Passing Tests) |
 | **Containerization** | Docker, Docker Compose (Multi-arch automated standard) |
 
 ---
@@ -186,12 +192,17 @@ CLERK_SECRET_KEY=sk_test_xxxxxxxxxxxxxxxx
 GEMINI_API_KEY=AIzaSyxxxxxxxxxxxxxxxx
 AI_PROVIDER=gemini  # Switch to 'ollama' for free local/self-hosted processing
 CLERK_AUTHORIZED_PARTIES=http://localhost:5173
+ADMIN_EMAILS=aradwadtushar72@gmail.com
+SUPPORT_EMAIL=aradwadt47@gmail.com
 ```
 
 Execute schema migrations and start the server:
 ```bash
 # Run database schema migrations
 alembic upgrade head
+
+# Run automated unit tests
+pytest -v
 
 # Start local uvicorn server
 uvicorn main:app --reload --host 127.0.0.1 --port 8000
