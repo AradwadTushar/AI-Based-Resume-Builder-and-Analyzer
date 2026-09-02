@@ -199,6 +199,12 @@ Required JSON format:
   "missing_keywords": [
     "keyword"
   ],
+  "hard_skills": [
+    "technical/hard skill missing or matching"
+  ],
+  "soft_skills": [
+    "communication, leadership, or team skill"
+  ],
   "recommendations": [
     "specific actionable recommendation"
   ]
@@ -207,6 +213,7 @@ Required JSON format:
 Rules:
 - Focus ONLY on relevance to the job description
 - Recommendations should be actionable
+- Categorize identified skills into hard_skills (tech/tools/languages) and soft_skills (interpersonal/management)
 - Missing keywords must come from the JD
 - Do not hallucinate unrelated technologies
 - No markdown

@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from services.rate_limiter import check_ai_rate_limit
 
 from schemas.ai import (
     ATSAnalysisRequest,
@@ -24,6 +25,7 @@ from services.ai_service import (
 router = APIRouter(
     prefix="/api/ai",
     tags=["AI"],
+    dependencies=[Depends(check_ai_rate_limit)],
 )
 
 

@@ -43,6 +43,8 @@ class JDMatchResponse(BaseModel):
     matched_keywords: list[str]
     missing_keywords: list[str]
     recommendations: list[str]
+    hard_skills: list[str] = []
+    soft_skills: list[str] = []
 
 
 class CoverLetterRequest(BaseModel):

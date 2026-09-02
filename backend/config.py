@@ -46,10 +46,10 @@ def clean_postgres_asyncpg_url(url: str) -> str:
 
 
 class Settings(BaseSettings):
-    DATABASE_URL: str
-    CLERK_SECRET_KEY: str
-    GEMINI_API_KEY: str
-    CLERK_AUTHORIZED_PARTIES: str
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/resumeiq_test"
+    CLERK_SECRET_KEY: str = "test_clerk_secret"
+    GEMINI_API_KEY: str = "test_gemini_key"
+    CLERK_AUTHORIZED_PARTIES: str = "http://localhost:5173"
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
