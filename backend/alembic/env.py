@@ -8,9 +8,17 @@ from config import settings
 
 config = context.config
 
+db_url = str(settings.DATABASE_URL).strip()
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
+elif db_url.startswith("postgresql://") and not db_url.startswith("postgresql+asyncpg://"):
+    db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+if "sslmode=" in db_url:
+    db_url = db_url.replace("sslmode=require", "ssl=require").replace("sslmode=prefer", "ssl=prefer")
+
 config.set_main_option(
     "sqlalchemy.url",
-    settings.DATABASE_URL
+    db_url
 )
 
 if config.config_file_name is not None:
