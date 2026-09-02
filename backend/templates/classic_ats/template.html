@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ personalInfo.fullName }} — Resume</title>
+  <link rel="stylesheet" href="/templates/{{ template_name }}/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════ -->
+  <header class="header">
+    <h1 class="name">{{ personalInfo.fullName }}</h1>
+
+    {% if personalInfo.title %}
+      <p class="headline">{{ personalInfo.title }}</p>
+    {% endif %}
+
+    <div class="contact-line">
+      {% set contact_parts = [] %}
+
+      {% if personalInfo.email %}
+        {% set _ = contact_parts.append(personalInfo.email) %}
+      {% endif %}
+      {% if personalInfo.phone %}
+        {% set _ = contact_parts.append(personalInfo.phone) %}
+      {% endif %}
+      {% if personalInfo.location %}
+        {% set _ = contact_parts.append(personalInfo.location) %}
+      {% endif %}
+      {% if personalInfo.linkedin %}
+        {% set _ = contact_parts.append(personalInfo.linkedin) %}
+      {% endif %}
+      {% if personalInfo.github %}
+        {% set _ = contact_parts.append(personalInfo.github) %}
+      {% endif %}
+      {% if personalInfo.portfolio %}
+        {% set _ = contact_parts.append(personalInfo.portfolio) %}
+      {% endif %}
+
+      {{ contact_parts | join("  •  ") }}
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════
+       SUMMARY
+  ══════════════════════════════════════ -->
+  {% if summary %}
+  <section class="section">
+    <h2 class="section-title">Professional Summary</h2>
+    <div class="section-rule"></div>
+    <p class="summary-body">{{ summary }}</p>
+  </section>
+  {% endif %}
+
+  <!-- ══════════════════════════════════════
+       EDUCATION
+  ══════════════════════════════════════ -->
+  {% if education and education | length > 0 %}
+  <section class="section">
+    <h2 class="section-title">Education</h2>
+    <div class="section-rule"></div>
+
+    {% for edu in education %}
+    <div class="entry">
+      <div class="entry-head">
+        <div class="entry-left">
+          <span class="entry-inst">{{ edu.institution }}</span>
+        </div>
+        <div class="entry-right">
+          <span class="entry-loc">{{ edu.location }}</span>
+        </div>
+      </div>
+      <div class="entry-sub">
+        <div class="entry-left">
+          <span class="entry-deg">{{ edu.degree }}{% if edu.field %} in {{ edu.field }}{% endif %}</span>
+        </div>
+        <div class="entry-right">
+          <span class="entry-date">
+            {% if edu.startDate and edu.endDate %}
+              {{ edu.startDate }} – {{ edu.endDate }}
+            {% elif edu.endDate %}
+              {{ edu.endDate }}
+            {% endif %}
+          </span>
+        </div>
+      </div>
+      {% if edu.gpa or edu.honors %}
+        <p class="entry-desc">
+          {% if edu.gpa %}GPA: {{ edu.gpa }}{% endif %}
+          {% if edu.gpa and edu.honors %} · {% endif %}
+          {% if edu.honors %}{{ edu.honors }}{% endif %}
+        </p>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+  </section>
+  {% endif %}
+
+  <!-- ══════════════════════════════════════
+       EXPERIENCE
+  ══════════════════════════════════════ -->
+  {% if experience and experience | length > 0 %}
+  <section class="section">
+    <h2 class="section-title">
+      {% if roleCategory == 'medical' %}Clinical Experience
+      {% elif roleCategory == 'education' %}Teaching Experience
+      {% else %}Professional Experience{% endif %}
+    </h2>
+    <div class="section-rule"></div>
+
+    {% for job in experience %}
+    <div class="entry">
+      <div class="entry-head">
+        <div class="entry-left">
+          <span class="entry-inst">{{ job.company }}</span>
+        </div>
+        <div class="entry-right">
+          <span class="entry-loc">{{ job.location }}</span>
+        </div>
+      </div>
+      <div class="entry-sub">
+        <div class="entry-left">
+          <span class="entry-deg">{{ job.title }}</span>
+        </div>
+        <div class="entry-right">
+          <span class="entry-date">
+            {{ job.startDate }} – {{ job.endDate if job.endDate else "Present" }}
+          </span>
+        </div>
+      </div>
+
+      {% if job.bullets and job.bullets | length > 0 %}
+        <ul class="bullets">
+          {% for bullet in job.bullets %}
+          <li>{{ bullet }}</li>
+          {% endfor %}
+        </ul>
+      {% elif job.description %}
+        <p class="entry-desc">{{ job.description }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+  </section>
+  {% endif %}
+
+  <!-- ══════════════════════════════════════
+       PROJECTS
+  ══════════════════════════════════════ -->
+  {% if projects and projects | length > 0 and (roleCategory == 'software_engineering' or roleCategory == 'design' or roleCategory == 'general') %}
+  <section class="section">
+    <h2 class="section-title">
+      {% if roleCategory == 'design' %}Portfolio Projects
+      {% else %}Key Projects{% endif %}
+    </h2>
+    <div class="section-rule"></div>
+
+    {% for project in projects %}
+    <div class="entry">
+      <div class="entry-head">
+        <div class="entry-left">
+          <span class="entry-inst">
+            {{ project.name }}
+            {% if project.url %} <span class="entry-url">({{ project.url }})</span>{% endif %}
+            {% if project.techStack %} <span class="tech-stack">| {{ project.techStack }}</span>{% endif %}
+          </span>
+        </div>
+        {% if project.date %}
+        <div class="entry-right">
+          <span class="entry-date">{{ project.date }}</span>
+        </div>
+        {% endif %}
+      </div>
+
+      {% if project.bullets and project.bullets | length > 0 %}
+        <ul class="bullets">
+          {% for bullet in project.bullets %}
+          <li>{{ bullet }}</li>
+          {% endfor %}
+        </ul>
+      {% elif project.description %}
+        <p class="entry-desc">{{ project.description }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+  </section>
+  {% endif %}
+
+  <!-- ══════════════════════════════════════
+       SKILLS
+  ══════════════════════════════════════ -->
+  {% if skills and skills | length > 0 %}
+  <section class="section">
+    <h2 class="section-title">Skills & Technical Proficiencies</h2>
+    <div class="section-rule"></div>
+
+    {% if skills[0] is mapping %}
+      <div class="skills-grouped">
+        {% for group in skills %}
+        <div class="skill-row">
+          <span class="skill-cat">{{ group.category }}:</span>
+          <span class="skill-vals">{{ group.items | join(", ") }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="skills-flat">{{ skills | join("   •   ") }}</p>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  <!-- ══════════════════════════════════════
+       CERTIFICATIONS
+  ══════════════════════════════════════ -->
+  {% if certifications and certifications | length > 0 %}
+  <section class="section">
+    <h2 class="section-title">
+      {% if roleCategory == 'medical' %}Licenses & Certifications
+      {% else %}Certifications{% endif %}
+    </h2>
+    <div class="section-rule"></div>
+
+    {% for cert in certifications %}
+    <div class="entry-head" style="margin-bottom: 3pt;">
+      <div class="entry-left">
+        <span class="entry-role">{{ cert.name }}</span>
+        {% if cert.issuer %}
+          <span class="entry-org">— {{ cert.issuer }}</span>
+        {% endif %}
+      </div>
+      {% if cert.date %}
+      <div class="entry-right">
+        <span class="entry-date">{{ cert.date }}</span>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+  </section>
+  {% endif %}
+
+</div>
+</body>
+</html>

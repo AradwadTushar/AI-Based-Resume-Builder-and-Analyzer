@@ -606,6 +606,7 @@ const handleTemplateChange =
         onClose={() => setIsPreviewOpen(false)}
         resumeId={id}
         onDownload={handleFinalDownload}
+        formData={formData}
       />
       <CoverLetterModal
         isOpen={coverLetterOpen}
