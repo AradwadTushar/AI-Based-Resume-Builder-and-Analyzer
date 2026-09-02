@@ -1,11 +1,11 @@
 import React from "react";
 
 const ROLE_CATEGORIES = [
-  { id: "software_engineering", label: "💻 Software Engineering" },
-  { id: "design", label: "🎨 UI/UX & Graphic Design" },
-  { id: "education", label: "🎓 Education & Academic" },
-  { id: "medical", label: "🩺 Healthcare & Medical" },
-  { id: "general", label: "💼 General Professional / Business" }
+  { id: "software_engineering", label: "Software Engineering" },
+  { id: "design", label: "UI/UX & Product Design" },
+  { id: "education", label: "Education & Academic" },
+  { id: "medical", label: "Healthcare & Clinical" },
+  { id: "general", label: "General Professional & Corporate" }
 ];
 
 function RoleCategorySelector({ selectedCategory, onChange }) {

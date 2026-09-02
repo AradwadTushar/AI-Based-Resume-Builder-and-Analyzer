@@ -1,6 +1,6 @@
 import pytest
 from fastapi import HTTPException
-from auth.dependencies import ADMIN_EMAIL, FREE_AI_LIMIT
+from auth.dependencies import is_admin_user, FREE_AI_LIMIT
 
 
 class DummyUser:
@@ -11,11 +11,7 @@ class DummyUser:
 
 
 def check_quota_logic(user: DummyUser):
-    is_admin = (
-        user.role == "admin"
-        or (user.email and user.email.lower().strip() == ADMIN_EMAIL.lower())
-    )
-    if is_admin:
+    if is_admin_user(user):
         return True
 
     if user.ai_requests_count >= FREE_AI_LIMIT:

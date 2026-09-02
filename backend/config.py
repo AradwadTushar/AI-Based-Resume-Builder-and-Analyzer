@@ -50,6 +50,8 @@ class Settings(BaseSettings):
     CLERK_SECRET_KEY: str = "test_clerk_secret"
     GEMINI_API_KEY: str = "test_gemini_key"
     CLERK_AUTHORIZED_PARTIES: str = "http://localhost:5173"
+    ADMIN_EMAILS: str = "aradwadtushar72@gmail.com"
+    SUPPORT_EMAIL: str = "aradwadt47@gmail.com"
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod

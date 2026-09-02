@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Globe, Cpu, Code2, Layers, Heart, Sparkles, ArrowLeft } from "lucide-react";
 import { useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
-import Sidebar from "../components/layout/Sidebar";
+import AppHeader from "../components/layout/AppHeader";
 import devAvatar from "../assets/dev_avatar.png";
+import logoIcon from "../assets/logo_icon.png";
 
 // Inline SVG brand icons
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -236,7 +237,10 @@ function About() {
         <div className="lg:col-span-6 space-y-6 text-left">
           {/* Project Card */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-xs space-y-4">
-            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">🚀 Project Overview</h2>
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-cyan-500" />
+              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">Project Overview</h2>
+            </div>
             <p className="text-sm text-slate-600 dark:text-slate-350 leading-relaxed">
               <strong>ResumeIQ AI</strong> is a modern AI-powered resume builder and ATS analyzer. It extracts text from PDF resumes, matches them against job descriptions using <strong>Gemini AI</strong>, flags missing keywords, and generates phrasing rewrites. Users edit, preview, and download A4-ready PDFs instantly.
             </p>
@@ -336,8 +340,31 @@ function About() {
         </div>
       </div>
 
+      {/* Back to Home CTA Bar */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl bg-slate-900/80 border border-slate-800 text-left">
+        <div>
+          <h4 className="text-sm font-bold text-white">Explore ResumeIQ AI</h4>
+          <p className="text-xs text-slate-400 mt-0.5">Build ATS-safe resumes with Gemini AI or run a live resume scan.</p>
+        </div>
+        <div className="flex items-center gap-2.5 shrink-0">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-750 text-slate-200 transition"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Home</span>
+          </Link>
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white transition shadow-sm"
+          >
+            <span>Open Dashboard</span>
+          </Link>
+        </div>
+      </div>
+
       {/* Footer */}
-      <div className="flex items-center justify-center gap-1 text-xs text-slate-400 dark:text-slate-600 pt-8 border-t border-slate-100 dark:border-slate-800">
+      <div className="flex items-center justify-center gap-1 text-xs text-slate-400 dark:text-slate-600 pt-6 border-t border-slate-100 dark:border-slate-800">
         <span>Made with</span>
         <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
         <span>by Tushar Aradwad © 2026</span>
@@ -347,9 +374,9 @@ function About() {
 
   if (isSignedIn) {
     return (
-      <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
-        <Sidebar />
-        <div className="flex-1 overflow-hidden">
+      <div className="flex flex-col min-h-screen bg-slate-950 text-slate-100">
+        <AppHeader />
+        <div className="flex-1 overflow-y-auto">
           {mainContent}
         </div>
       </div>
@@ -357,8 +384,43 @@ function About() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      {mainContent}
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+      {/* Public Top Navbar for Signed Out Visitors */}
+      <header className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 lg:px-8 py-3">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <img src={logoIcon} alt="ResumeIQ AI" className="w-8 h-8 object-contain" />
+            <span className="text-base font-black tracking-tight text-white">
+              ResumeIQ <span className="text-cyan-400">AI</span>
+            </span>
+          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-900 border border-slate-800 transition"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Home</span>
+            </Link>
+            <Link
+              to="/sign-in"
+              className="text-xs font-semibold text-slate-300 hover:text-cyan-400 px-2 py-1.5 transition hidden sm:inline"
+            >
+              Sign In
+            </Link>
+            <Link
+              to="/sign-up"
+              className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white transition shadow-sm"
+            >
+              Get Started Free
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex-1 overflow-y-auto">
+        {mainContent}
+      </div>
     </div>
   );
 }

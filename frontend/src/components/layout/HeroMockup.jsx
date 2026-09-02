@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Check, Star, Zap, Sparkles } from "lucide-react";
 
 const keywords = [
   { label: "React", status: "found" },
@@ -98,8 +99,8 @@ function HeroMockup() {
           boxShadow: "0 20px 40px -12px rgba(30,27,75,0.25)",
         }}
       >
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white text-[11px]">
-          ✓
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white">
+          <Check className="w-3 h-3 text-white" />
         </span>
         Impact metric added: +34% output
       </div>
@@ -114,8 +115,8 @@ function HeroMockup() {
           boxShadow: "0 20px 40px -12px rgba(30,27,75,0.25)",
         }}
       >
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-white text-[11px]">
-          ★
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-white">
+          <Star className="w-3 h-3 text-white fill-white" />
         </span>
         Missing keyword AWS found
       </div>
@@ -130,8 +131,8 @@ function HeroMockup() {
           boxShadow: "0 20px 40px -12px rgba(30,27,75,0.25)",
         }}
       >
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500 text-white text-[11px]">
-          ⚡
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500 text-white">
+          <Zap className="w-3 h-3 text-white fill-white" />
         </span>
         ATS Optimization: Complete
       </div>
@@ -180,7 +181,7 @@ function HeroMockup() {
               Experience
             </p>
             <div className="flex gap-2 text-[12px] text-slate-700 dark:text-slate-300 leading-relaxed mb-2.5">
-              <span className="text-emerald-500 font-bold shrink-0">✓</span>
+              <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
               <span>
                 Led migration to{" "}
                 <span className="bg-indigo-55 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold px-1 rounded">
@@ -191,7 +192,7 @@ function HeroMockup() {
               </span>
             </div>
             <div className="flex gap-2 text-[12px] text-slate-700 dark:text-slate-300 leading-relaxed mb-2.5">
-              <span className="text-emerald-500 font-bold shrink-0">✓</span>
+              <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
               <span>
                 Owned{" "}
                 <span className="bg-indigo-55 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold px-1 rounded">
@@ -202,7 +203,7 @@ function HeroMockup() {
               </span>
             </div>
             <div className="flex gap-2 text-[12px] text-slate-700 dark:text-slate-300 leading-relaxed mb-2.5">
-              <span className="text-emerald-500 font-bold shrink-0">✓</span>
+              <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
               <span>
                 Mentored 4 engineers; raised sprint velocity{" "}
                 <b className="text-slate-900 dark:text-white font-bold">28%</b>
@@ -292,8 +293,8 @@ function HeroMockup() {
           boxShadow: "0 20px 40px -12px rgba(30,27,75,0.25)",
         }}
       >
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-white text-[11px]">
-          ✨
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-white">
+          <Sparkles className="w-3 h-3 text-white" />
         </span>
         Rewriting bullet with Gemini{".".repeat(dots)}
       </div>

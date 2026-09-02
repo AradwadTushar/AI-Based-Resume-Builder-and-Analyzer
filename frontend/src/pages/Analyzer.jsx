@@ -4,6 +4,8 @@ import {
   FileText, 
   AlertTriangle, 
   CheckCircle, 
+  CheckCircle2,
+  Lightbulb,
   ArrowRight, 
   Sparkles, 
   RefreshCw 
@@ -355,7 +357,10 @@ function Analyzer() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Weak Sections */}
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm space-y-3">
-                  <h4 className="font-bold text-slate-800 dark:text-slate-100 text-sm">⚠️ Formatting & Section Gaps</h4>
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-500" />
+                    <h4 className="font-bold text-slate-800 dark:text-slate-100 text-sm">Formatting & Section Gaps</h4>
+                  </div>
                   {result.feedback.weak_sections?.length > 0 ? (
                     <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-350">
                       {result.feedback.weak_sections.map((ws, i) => (
@@ -372,12 +377,15 @@ function Analyzer() {
 
                 {/* Suggestions */}
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm space-y-3">
-                  <h4 className="font-bold text-slate-800 dark:text-slate-100 text-sm">💡 Actionable Suggestions</h4>
+                  <div className="flex items-center gap-2">
+                    <Lightbulb className="w-4 h-4 text-purple-400" />
+                    <h4 className="font-bold text-slate-800 dark:text-slate-100 text-sm">Actionable Suggestions</h4>
+                  </div>
                   {result.feedback.suggestions?.length > 0 ? (
                     <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-350">
                       {result.feedback.suggestions.map((sug, i) => (
                         <li key={i} className="flex gap-2 items-start">
-                          <span className="text-indigo-500 font-bold">✓</span>
+                          <CheckCircle2 className="w-3.5 h-3.5 text-cyan-500 shrink-0 mt-0.5" />
                           <span>{sug}</span>
                         </li>
                       ))}

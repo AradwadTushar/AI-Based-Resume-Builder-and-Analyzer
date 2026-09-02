@@ -9,7 +9,7 @@ import {
 
 const TOUR_STEPS = [
   {
-    title: "Welcome to AI Resume Pro! 🚀",
+    title: "Welcome to AI Resume Pro",
     desc: "Let's take a quick 45-second tour to show you how to build and optimize your resumes using Gemini AI.",
     icon: <Sparkles className="w-8 h-8 text-indigo-500 animate-bounce" />,
     btnText: "Start Tour"

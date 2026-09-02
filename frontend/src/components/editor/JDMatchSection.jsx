@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import PremiumLoader from "../ui/PremiumLoader";
-import { Check, Copy, Plus, Sparkles, AlertCircle, Layers } from "lucide-react";
+import { Check, Copy, Plus, Sparkles, AlertCircle, Layers, Cpu, Users, XCircle, CheckCircle2, Lightbulb, X } from "lucide-react";
 
 export default function JDMatchModal({
   isOpen,
@@ -65,9 +65,9 @@ export default function JDMatchModal({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-slate-200 transition-colors"
+            className="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
           >
-            ✕
+            <X className="w-4 h-4" />
           </button>
         </div>
 
